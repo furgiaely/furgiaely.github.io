@@ -6,6 +6,17 @@
 </HEAD>
 
 <BODY BGCOLOR="#FFFFFF">
+
+ <h3>Updated at </h3><p id="datetime"></p>
+<script>
+  // Get current date and time
+  var now = new Date();
+  var datetime = now.toLocaleString();
+
+  // Insert date and time into HTML
+  document.getElementById("datetime").innerHTML = datetime;
+</script>
+ 
 <A NAME="2ndlink"></A>
 <P><A HREF="#causeway">&gt;&gt; Causeway</A></P>
 <TABLE WIDTH="100%" BORDER="0"><TR><TD WIDTH="50"> 
