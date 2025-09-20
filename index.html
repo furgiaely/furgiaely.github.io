@@ -9,7 +9,7 @@
 <BODY BGCOLOR="#FFFFFF">
 <!-- **********old code clock******** 
 <h3>Updated at </h3><p id="datetime"></p><p id="dayofweek"></p>
--->
+
 <script>
   // Get current date and time
   var now = new Date();
@@ -28,8 +28,8 @@
   document.getElementById("datetime").innerHTML = datetime;
   document.getElementById("dayofweek").innerHTML = dayofweek;
 </script>
+-->
 
-// new code start
     <div class="datetime" id="datetime">
         Updated at <span id="date-time"></span>
     </div>
@@ -75,9 +75,10 @@
             
             document.getElementById('date-time').textContent = dateTimeString;
         }
-
+        // Initial update
+        updateDateTime();
     </script>
-  // new code ends
+  
   
 <!-- **********Woodlands code start******** -->
 <TR><TD WIDTH="50">
@@ -181,6 +182,7 @@ SG to JB (Causeway)</h3><div class="cctvFrame"><iframe loading="lazy" style="bor
  --> 
 </BODY>
 </HTML>
+
 
 
 
