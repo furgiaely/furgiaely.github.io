@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="apple-touch-icon" href="https://i.ibb.co/Xk8GpvdD/cedar1.png">
- <title>Redirecting to Timetable</title>
+
+    <title>Redirecting to Timetable</title>
 
     <script>
         // Configuration
@@ -47,12 +48,13 @@
             const today = new Date();
             const termWeek = calculateTermWeek(today);
             const isOddWeek = isWeekOdd(termWeek);
-            const timetableUrl = isOddWeek ? 'timetable_odd.png' : 'timetable_even.png';
+            const timetableUrl = isOddWeek ? 'timetable_odd.html' : 'timetable_even.html';
             
             // Redirect immediately
             window.location.href = timetableUrl;
         })();
     </script>
+
 
 </head>
 <body>
@@ -60,4 +62,3 @@ redirect
     <!-- No content needed - page will redirect immediately -->
 </body>
 </html>
-
