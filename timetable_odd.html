@@ -15,10 +15,11 @@
         body {
             background-color: #000;
             height: 100vh;
-            height: -webkit-fill-available; /* Safari mobile fix */
+            height: -webkit-fill-available;
             height: fill-available;
             overflow: hidden;
             font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            touch-action: none; /* Prevent default browser actions */
         }
         
         .timetable-container {
@@ -30,6 +31,8 @@
             overflow-y: hidden;
             -webkit-overflow-scrolling: touch;
             position: relative;
+            /* Enable touch scrolling */
+            touch-action: pan-x;
         }
         
         .timetable-image {
@@ -41,6 +44,10 @@
             max-height: 100%;
             object-fit: contain;
             object-position: left top;
+            /* Enable touch on image */
+            touch-action: pan-x;
+            user-select: none;
+            -webkit-user-drag: none;
         }
         
         /* iOS Safe Area Insets */
@@ -207,13 +214,13 @@
         
         /* Add some margin to prevent touching edges */
         .timetable-container {
-            padding-bottom: 1px; /* Prevents bottom bar interference */
+            padding-bottom: 1px;
         }
         
         /* Handle dynamic viewport changes */
         @media (orientation: landscape) {
             .instruction {
-                bottom: 20px; /* Lower in landscape */
+                bottom: 20px;
             }
             
             @supports (padding: max(0px)) {
@@ -223,9 +230,10 @@
             }
         }
         
-        /* Prevent zooming on double-tap */
-        .timetable-image {
-            touch-action: pan-x pan-y;
+        /* Disable text selection */
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
         }
     </style>
 </head>
@@ -268,7 +276,6 @@
         function adjustImageHeight() {
             const img = document.getElementById('timetableImg');
             const container = document.getElementById('container');
-            const instruction = document.getElementById('instruction');
             
             if (!img.complete) return;
             
@@ -285,13 +292,6 @@
             // Set image height to available height
             img.style.height = availableHeight + 'px';
             container.style.height = availableHeight + 'px';
-            
-            // Adjust instruction position
-            if (CSS.supports('padding: env(safe-area-inset-bottom)')) {
-                const safeAreaBottom = parseInt(getComputedStyle(document.documentElement)
-                    .getPropertyValue('--sab') || '0');
-                instruction.style.bottom = (60 + safeAreaBottom) + 'px';
-            }
         }
         
         function imageLoaded() {
@@ -325,6 +325,7 @@
                 }
                 
                 // Scroll to show left edge is visible
+                const container = document.getElementById('container');
                 container.scrollLeft = 0;
                 
                 // Add a subtle bounce hint if content is scrollable
@@ -385,13 +386,8 @@
         });
         
         // Handle viewport changes (Safari bottom bar show/hide)
-        let vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-        
         window.addEventListener('resize', () => {
             adjustImageHeight();
-            let vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
         });
         
         window.addEventListener('orientationchange', () => {
@@ -409,11 +405,37 @@
             }
         });
         
-        // Prevent Safari rubber-band overscroll effect
-        document.body.addEventListener('touchmove', function(e) {
-            if (e.target.id === 'container' || e.target.id === 'timetableImg') {
-                e.preventDefault();
-            }
+        // Add smooth scrolling with touch
+        let isScrolling = false;
+        let startX = 0;
+        let scrollLeft = 0;
+        
+        const container = document.getElementById('container');
+        
+        container.addEventListener('touchstart', function(e) {
+            isScrolling = true;
+            startX = e.touches[0].pageX - container.offsetLeft;
+            scrollLeft = container.scrollLeft;
+            e.preventDefault(); // Prevent default only for touchstart
+        }, { passive: false });
+        
+        container.addEventListener('touchmove', function(e) {
+            if (!isScrolling) return;
+            e.preventDefault(); // Prevent default only when we're handling the scroll
+            const x = e.touches[0].pageX - container.offsetLeft;
+            const walk = (x - startX) * 2; // Multiply for faster scrolling
+            container.scrollLeft = scrollLeft - walk;
+        }, { passive: false });
+        
+        container.addEventListener('touchend', function() {
+            isScrolling = false;
+        });
+        
+        // Also enable mouse wheel scrolling
+        container.addEventListener('wheel', function(e) {
+            // Horizontal scrolling with wheel
+            container.scrollLeft += e.deltaY;
+            e.preventDefault();
         }, { passive: false });
     </script>
 </body>
