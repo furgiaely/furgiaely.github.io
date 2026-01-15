@@ -5,6 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <link rel="apple-touch-icon" href="https://i.ibb.co/Xk8GpvdD/cedar1.png">
     <title>Odd Week Timetable</title>
+
+// check for even weeks
+
+    <script>
+        (function() {
+            // Term starts Jan 5, 2026 (Week 1), 10 weeks total
+            const termStart = new Date('2026-01-05');
+            const today = new Date();
+            
+            // Adjust today to Monday of current week
+            const todayMonday = new Date(today);
+            const dayOffset = today.getDay() === 0 ? -6 : 1 - today.getDay();
+            todayMonday.setDate(today.getDate() + dayOffset);
+            
+            // Adjust term start to Monday (already Monday)
+            const startMonday = new Date(termStart);
+            
+            // Calculate weeks difference
+            const msPerWeek = 1000 * 60 * 60 * 24 * 7;
+            const weekDiff = Math.floor((todayMonday - startMonday) / msPerWeek);
+            
+            // Determine current week (1-10)
+            let currentWeek = weekDiff + 1;
+            currentWeek = Math.max(1, Math.min(10, currentWeek));
+            
+            // Redirect if even week (2, 4, 6, 8, 10)
+            if (currentWeek % 2 === 0) {
+                window.location.href = 'timetable_even.html';
+            }
+        })();
+    </script>
+
+
     <style>
         * {
             margin: 0;
