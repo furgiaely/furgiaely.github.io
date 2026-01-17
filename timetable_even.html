@@ -10,30 +10,29 @@
 
     <script>
         (function() {
-            // Term configuration
-            const termStart = new Date('2026-01-05');
-            const termWeeks = 10;
-            
-            // Calculate current term week
+            // Term: Jan 4, 2026 (Sunday) = Week 1, 10 weeks total
+            const start = new Date('2026-01-04');
             const today = new Date();
-            const todayMonday = new Date(today);
-            const dayAdjust = today.getDay() === 0 ? -6 : 1 - today.getDay();
-            todayMonday.setDate(today.getDate() + dayAdjust);
             
-            const startMonday = new Date(termStart);
-            const weekDiff = Math.floor((todayMonday - startMonday) / (1000 * 60 * 60 * 24 * 7));
+            // Adjust to Sunday
+            const todaySunday = new Date(today);
+            todaySunday.setDate(today.getDate() - today.getDay());
             
-            let currentWeek = weekDiff + 1;
-            if (currentWeek < 1) currentWeek = 1;
-            if (currentWeek > termWeeks) currentWeek = termWeeks;
+            // Calculate weeks since term start
+            const msPerWeek = 604800000; // 7 days in milliseconds
+            const weeksSince = Math.floor((todaySunday - start) / msPerWeek);
             
-            // Redirect if odd week
-            if (currentWeek % 2 === 1) {
+            // Current week (1-10)
+            let week = weeksSince + 1;
+            week = week < 1 ? 1 : week > 10 ? 10 : week;
+            
+            // Redirect for odd weeks
+            if (week % 2 === 1) {
                 window.location.href = 'timetable_odd.html';
             }
         })();
     </script>
-
+    
     <style>
         * {
             margin: 0;
