@@ -8,27 +8,36 @@
 
 <script>
         // Redirect to even timetable only for even weeks
-        (function() {
-            // Term: Jan 4, 2026 (Sunday) = Week 1, 10 weeks
-            const start = new Date('2026-01-04');
-            const today = new Date();
-            
-            // Get Sunday of current week
-            const todaySunday = new Date(today);
-            todaySunday.setDate(today.getDate() - today.getDay());
-            
-            // Calculate week number
-            const weeksSince = Math.floor((todaySunday - start) / 604800000);
-            let week = weeksSince + 1;
-            
-            // Clamp to 1-10 range
-            week = week < 1 ? 1 : week > 10 ? 10 : week;
-            
-            // Redirect for even weeks only
-            if (week % 2 === 0) {
-                window.location.href = 'timetable_even.html';
-            }
-        })();
+
+(function() {
+    // Use local time, not UTC midnight
+    const start = new Date(2026, 0, 4); // Year, Month (0-based), Day
+    const today = new Date(); // Current date/time
+    
+    // Get Sunday (0 = Sunday in JavaScript)
+    const todaySunday = new Date(today);
+    const daysToSubtract = today.getDay(); // 0-6
+    todaySunday.setDate(today.getDate() - daysToSubtract);
+    
+    // Reset times to midnight for accurate calculation
+    todaySunday.setHours(0, 0, 0, 0);
+    start.setHours(0, 0, 0, 0);
+    
+    // Calculate weeks (more precise)
+    const msPerWeek = 7 * 24 * 60 * 60 * 1000; // 604800000
+    const diffMs = todaySunday.getTime() - start.getTime();
+    const weeksSince = Math.floor(diffMs / msPerWeek);
+    
+    let week = weeksSince + 1;
+    week = Math.max(1, Math.min(10, week)); // Clamp 1-10
+    
+    console.log(`Week calculation: ${week} (${week % 2 === 0 ? 'Even' : 'Odd'})`);
+    
+    if (week % 2 === 0) {
+        window.location.href = 'timetable_even.html';
+    }
+})();        
+
     </script>
 
 
@@ -40,7 +49,7 @@
         }
         
         body {
-            background-color: #001;
+            background-color: #000;
             height: 100vh;
             height: -webkit-fill-available;
             height: fill-available;
@@ -129,11 +138,11 @@
         /* Simple instruction - positioned above Safari bar */
         .instruction {
             position: fixed;
-            bottom: 80px; /* Above Safari bottom bar */
+            bottom: 70px; /* Above Safari bottom bar */
             right: 20px;
             background: rgba(0, 0, 0, 0.85);
             color: white;
-            padding: 10px 18px;
+            padding: 12px 18px;
             border-radius: 22px;
             font-size: 15px;
             display: flex;
@@ -466,9 +475,4 @@
         }, { passive: false });
     </script>
 </body>
-
 </html>
-
-
-
-

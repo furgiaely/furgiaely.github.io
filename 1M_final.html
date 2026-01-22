@@ -8,52 +8,65 @@
 
     <title>Redirecting to Timetable</title>
 
-    <script>
-        // Configuration
-        const TERM_START_DATE = new Date('2026-01-05'); // January 5, 2026 (Monday, Week 1)
-        const TERM_WEEKS = 10; // 10-week school term
+   <script>
+    // Robust Configuration
+    (function() {
+        // Term starts Jan 4, 2026 (Sunday) - 10 weeks total
+        const TERM_START = new Date(2026, 0, 4); // Year, Month (0-based), Day - LOCAL TIME
+        const TERM_WEEKS = 10;
         
-        // Function to calculate term week for a given date
+        // Function to calculate term week for a given date (Sunday start)
         function calculateTermWeek(date) {
-            // Clone dates to avoid mutation
-            const targetDate = new Date(date);
-            const termStart = new Date(TERM_START_DATE);
+            // Use local time constructor for input date
+            const targetDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            const termStart = new Date(TERM_START);
             
-            // Set both dates to Monday of their respective weeks
-            const targetDay = targetDate.getDay();
-            const daysToMonday = targetDay === 0 ? -6 : 1 - targetDay;
-            targetDate.setDate(targetDate.getDate() + daysToMonday);
+            // Set both dates to Sunday of their respective weeks
+            // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+            const targetDay = targetDate.getDay(); // 0-6
+            const daysToSunday = 0 - targetDay; // Adjust to previous Sunday
+            targetDate.setDate(targetDate.getDate() + daysToSunday);
+            
+            // Normalize to midnight for clean calculation
+            targetDate.setHours(0, 0, 0, 0);
+            termStart.setHours(0, 0, 0, 0);
             
             // Calculate difference in weeks
-            const diffInMs = targetDate - termStart;
-            const diffInWeeks = Math.floor(diffInMs / (1000 * 60 * 60 * 24 * 7));
+            const msPerWeek = 7 * 24 * 60 * 60 * 1000; // 604800000
+            const diffMs = targetDate.getTime() - termStart.getTime();
+            const diffInWeeks = Math.floor(diffMs / msPerWeek);
             
             // Return week number (1-based)
             let termWeek = diffInWeeks + 1;
             
             // Handle dates outside term range
-            if (termWeek < 1) return 1;
-            if (termWeek > TERM_WEEKS) return TERM_WEEKS;
+            termWeek = Math.max(1, Math.min(TERM_WEEKS, termWeek));
             
             return termWeek;
         }
         
-        // Function to check if week is odd or even
+        // Function to check if week is odd (Sunday start, Jan 4, 2026 = Week 1 = Odd)
         function isWeekOdd(weekNumber) {
-            return weekNumber % 2 === 1;
+            return weekNumber % 2 === 1; // Returns true for odd weeks (1, 3, 5, 7, 9)
         }
         
-        // Redirect to appropriate timetable
-        (function() {
-            const today = new Date();
-            const termWeek = calculateTermWeek(today);
-            const isOddWeek = isWeekOdd(termWeek);
-            const timetableUrl = isOddWeek ? 'timetable_odd.html' : 'timetable_even.html';
-            
-            // Redirect immediately
-            window.location.href = timetableUrl;
-        })();
-    </script>
+        // Main function to check and redirect
+        const today = new Date();
+        const termWeek = calculateTermWeek(today);
+        const isOddWeek = isWeekOdd(termWeek);
+        const timetableUrl = isOddWeek ? 'timetable_odd.html' : 'timetable_even.html';
+        
+        // Debug logging (remove in production)
+        console.log('Today:', today.toDateString());
+        console.log('Term Week:', termWeek);
+        console.log('Is Odd Week:', isOddWeek);
+        console.log('Redirecting to:', timetableUrl);
+        
+        // Redirect immediately
+        window.location.href = timetableUrl;
+        
+    })();
+</script>
 
 
 </head>

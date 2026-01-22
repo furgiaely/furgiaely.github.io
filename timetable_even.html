@@ -7,22 +7,32 @@
     <title>Even Week Timetable</title>
 
     <script>
-        (function() {
-            // Term: Jan 4, 2026 (Sunday) = Week 1, 10 weeks total
-            const start = new Date('2026-01-04');
-            const today = new Date();
-            
-            // Adjust to Sunday
-            const todaySunday = new Date(today);
-            todaySunday.setDate(today.getDate() - today.getDay());
-            
-            // Calculate weeks since term start
-            const msPerWeek = 604800000; // 7 days in milliseconds
-            const weeksSince = Math.floor((todaySunday - start) / msPerWeek);
-            
-            // Current week (1-10)
-            let week = weeksSince + 1;
-            week = week < 1 ? 1 : week > 10 ? 10 : week;
+// check for odd week
+
+(function() {
+    // Use local time, not UTC midnight
+    const start = new Date(2026, 0, 4); // Year, Month (0-based), Day
+    const today = new Date(); // Current date/time
+    
+    // Get Sunday (0 = Sunday in JavaScript)
+    const todaySunday = new Date(today);
+    const daysToSubtract = today.getDay(); // 0-6
+    todaySunday.setDate(today.getDate() - daysToSubtract);
+    
+    // Reset times to midnight for accurate calculation
+    todaySunday.setHours(0, 0, 0, 0);
+    start.setHours(0, 0, 0, 0);
+    
+    // Calculate weeks (more precise)
+    const msPerWeek = 7 * 24 * 60 * 60 * 1000; // 604800000
+    const diffMs = todaySunday.getTime() - start.getTime();
+    const weeksSince = Math.floor(diffMs / msPerWeek);
+    
+    let week = weeksSince + 1;
+    week = Math.max(1, Math.min(10, week)); // Clamp 1-10
+    
+    console.log(`Week calculation: ${week} (${week % 2 === 0 ? 'Even' : 'Odd'})`);
+
             
             // Redirect for odd weeks
             if (week % 2 === 1) {
@@ -465,5 +475,4 @@
         }, { passive: false });
     </script>
 </body>
-
 </html>
