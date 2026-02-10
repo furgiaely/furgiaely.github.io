@@ -50,7 +50,7 @@
             background-color: rgba(255, 255, 255, 0.1);
             padding: 20px;
             border-radius: 8px;
-            margin-bottom: 25px;
+            margin-bottom: 10px;
             text-align: left;
         }
         
@@ -58,7 +58,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
-            margin-bottom: 20px;
         }
         
         .info-item {
@@ -74,47 +73,6 @@
         .info-value {
             font-size: 1.2rem;
             font-weight: bold;
-        }
-        
-        .countdown-container {
-            background-color: rgba(255, 255, 255, 0.15);
-            padding: 20px;
-            border-radius: 8px;
-        }
-        
-        .countdown-title {
-            font-size: 1.4rem;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-        
-        .countdown-timer {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .countdown-item {
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 15px;
-            border-radius: 8px;
-            min-width: 90px;
-        }
-        
-        .countdown-value {
-            font-size: 2.2rem;
-            font-weight: 700;
-            line-height: 1;
-            margin-bottom: 5px;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-        }
-        
-        .countdown-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
         
         .content {
@@ -364,19 +322,6 @@
                 flex-direction: column;
             }
             
-            .countdown-timer {
-                gap: 10px;
-            }
-            
-            .countdown-item {
-                min-width: 75px;
-                padding: 12px 8px;
-            }
-            
-            .countdown-value {
-                font-size: 1.8rem;
-            }
-            
             .vehicle-info-grid {
                 grid-template-columns: 1fr;
             }
@@ -436,28 +381,6 @@
                         <div class="info-value" id="remaining-coe">Calculating...</div>
                     </div>
                 </div>
-                
-                <div class="countdown-container">
-                    <div class="countdown-title">COE Expiry Countdown</div>
-                    <div class="countdown-timer">
-                        <div class="countdown-item">
-                            <div class="countdown-value" id="days">000</div>
-                            <div class="countdown-label">Days</div>
-                        </div>
-                        <div class="countdown-item">
-                            <div class="countdown-value" id="hours">00</div>
-                            <div class="countdown-label">Hours</div>
-                        </div>
-                        <div class="countdown-item">
-                            <div class="countdown-value" id="minutes">00</div>
-                            <div class="countdown-label">Minutes</div>
-                        </div>
-                        <div class="countdown-item">
-                            <div class="countdown-value" id="seconds">00</div>
-                            <div class="countdown-label">Seconds</div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </header>
         
@@ -515,7 +438,7 @@
                         </div>
                         <div class="calculation-step">
                             <div class="step-label">Calculation Formula</div>
-                            <div class="step-value">(COE Price × Unused Months) ÷ 120</div>
+                            <div class="step-value">(COE Price × Unused Months) ÷ Total COE Months</div>
                         </div>
                         <div class="calculation-step">
                             <div class="step-label">Monthly Depreciation</div>
@@ -586,16 +509,16 @@
                 <div class="scenario">
                     <h3>COE Rebate Calculation (Official Method)</h3>
                     <p>When you deregister your vehicle before the COE expires, you receive a rebate for the unused portion of your COE.</p>
-                    <div class="formula">COE Rebate = (Original COE Price × Unused Months) ÷ 120</div>
+                    <div class="formula">COE Rebate = (Original COE Price × Unused Months) ÷ Total COE Months</div>
                     <p><strong>Where:</strong></p>
                     <ul>
                         <li><strong>Original COE Price:</strong> The amount paid for the COE</li>
                         <li><strong>Unused Months:</strong> Remaining period from deregistration to COE expiry (in decimal months)</li>
-                        <li><strong>120:</strong> Total months in a 10-year COE period</li>
+                        <li><strong>Total COE Months:</strong> Total months in your COE period (typically 120 months for 10 years)</li>
                     </ul>
                     <p><strong>Days to Months Conversion:</strong> For calculation purposes, 1 month = 30 days</p>
                     <div class="formula">Decimal Months = Whole Months + (Days ÷ 30)</div>
-                    <p>No COE rebate is given after the full 10-year period.</p>
+                    <p>No COE rebate is given after the full COE period has expired.</p>
                 </div>
                 
                 <div class="scenario">
@@ -687,12 +610,6 @@
             const vehicleAgeTodayElement = document.getElementById('vehicle-age-today');
             const remainingCoeElement = document.getElementById('remaining-coe');
             
-            // Countdown elements
-            const daysElement = document.getElementById('days');
-            const hoursElement = document.getElementById('hours');
-            const minutesElement = document.getElementById('minutes');
-            const secondsElement = document.getElementById('seconds');
-            
             // COE calculation elements
             const coePeriodDisplayElement = document.getElementById('coe-period-display');
             const unusedCoePeriodElement = document.getElementById('unused-coe-period');
@@ -738,49 +655,6 @@
             // Initialize calculator
             updateVehicleInfo();
             calculateRebate();
-            startCountdown();
-            
-            // Update countdown every second
-            function startCountdown() {
-                updateCountdown(); // Initial update
-                setInterval(updateCountdown, 1000);
-            }
-            
-            // Update the countdown timer
-            function updateCountdown() {
-                const coeExpiryDate = new Date(coeExpiryDateInput.value);
-                const now = new Date();
-                const timeRemaining = coeExpiryDate - now;
-                
-                if (timeRemaining < 0) {
-                    // COE has expired
-                    daysElement.textContent = '000';
-                    hoursElement.textContent = '00';
-                    minutesElement.textContent = '00';
-                    secondsElement.textContent = '00';
-                    
-                    // Show expired notice if not already shown
-                    if (!document.querySelector('.expired-notice')) {
-                        const expiredNotice = document.createElement('div');
-                        expiredNotice.className = 'expired-notice';
-                        expiredNotice.textContent = 'Your COE has expired. No COE rebate is available.';
-                        document.querySelector('.calculator-section').appendChild(expiredNotice);
-                    }
-                    return;
-                }
-                
-                // Calculate days, hours, minutes, seconds
-                const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-                
-                // Update display with leading zeros
-                daysElement.textContent = days.toString().padStart(3, '0');
-                hoursElement.textContent = hours.toString().padStart(2, '0');
-                minutesElement.textContent = minutes.toString().padStart(2, '0');
-                secondsElement.textContent = seconds.toString().padStart(2, '0');
-            }
             
             // Format date to display format (e.g., 16 April 2019)
             function formatDateForDisplay(date) {
