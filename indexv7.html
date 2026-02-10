@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COE Deregistration & PARF Rebate Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #1a237e, #283593);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 25px;
+        }
+        
+        .vehicle-info-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        
+        .vehicle-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-item {
+            padding: 10px;
+        }
+        
+        .info-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .countdown-container {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .countdown-title {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .countdown-item {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            min-width: 90px;
+        }
+        
+        .countdown-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .countdown-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+        
+        .calculator-section {
+            flex: 1;
+            min-width: 320px;
+            padding: 25px;
+            border-right: 1px solid #eee;
+        }
+        
+        .explanation-section {
+            flex: 1;
+            min-width: 320px;
+            padding: 25px;
+            background-color: #f9fafc;
+        }
+        
+        h2 {
+            color: #1a237e;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8eaf6;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            border-color: #283593;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(40, 53, 147, 0.2);
+        }
+        
+        .input-note {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .coe-calculation, .parf-calculation {
+            background-color: #f8f9ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        
+        .coe-calculation {
+            border-left: 4px solid #3949ab;
+        }
+        
+        .parf-calculation {
+            border-left: 4px solid #0d47a1;
+        }
+        
+        .calculation-title {
+            color: #1a237e;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .parf-calculation .calculation-title {
+            color: #0d47a1;
+        }
+        
+        .calculation-steps {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .calculation-step {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .calculation-step:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .step-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+        }
+        
+        .step-value {
+            font-weight: bold;
+            color: #1a237e;
+        }
+        
+        .rebate-amount {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a237e, #3949ab);
+            color: white;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .rebate-label {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+        
+        .rebate-value {
+            font-size: 2.2rem;
+            font-weight: bold;
+        }
+        
+        .total-rebate {
+            text-align: center;
+            padding: 25px;
+            background: linear-gradient(135deg, #2e7d32, #388e3c);
+            color: white;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .total-label {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+        
+        .total-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        
+        .btn-calculate {
+            background-color: #283593;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-calculate:hover {
+            background-color: #1a237e;
+        }
+        
+        .scenario {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .scenario h3 {
+            color: #283593;
+            margin-bottom: 10px;
+        }
+        
+        .scenario p {
+            margin-bottom: 10px;
+        }
+        
+        .formula {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 15px 0;
+            font-size: 1rem;
+        }
+        
+        .official-example {
+            background-color: #e8f5e8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .official-example h4 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        
+        .parf-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        
+        .parf-table th, .parf-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .parf-table th {
+            background-color: #e8eaf6;
+            font-weight: bold;
+        }
+        
+        .parf-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .parf-table tr:hover {
+            background-color: #f1f3ff;
+        }
+        
+        @media (max-width: 768px) {
+            .calculator-section {
+                border-right: none;
+                border-bottom: 1px solid #eee;
+            }
+            
+            .content {
+                flex-direction: column;
+            }
+            
+            .countdown-timer {
+                gap: 10px;
+            }
+            
+            .countdown-item {
+                min-width: 75px;
+                padding: 12px 8px;
+            }
+            
+            .countdown-value {
+                font-size: 1.8rem;
+            }
+            
+            .vehicle-info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            margin-top: 20px;
+        }
+        
+        .note {
+            background-color: #fff8e1;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin-top: 20px;
+        }
+        
+        .expired-notice {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #c62828;
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>COE Deregistration & PARF Rebate Calculator</h1>
+            <p class="subtitle">Calculate COE and PARF rebates upon vehicle deregistration in Singapore</p>
+            
+            <div class="vehicle-info-container">
+                <div class="vehicle-info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Registration Date</div>
+                        <div class="info-value" id="display-registration-date">16 April 2019</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">COE Expiry Date</div>
+                        <div class="info-value" id="display-coe-expiry">15 April 2029</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Vehicle Age Today</div>
+                        <div class="info-value" id="vehicle-age-today">Calculating...</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Remaining COE Period</div>
+                        <div class="info-value" id="remaining-coe">Calculating...</div>
+                    </div>
+                </div>
+                
+                <div class="countdown-container">
+                    <div class="countdown-title">COE Expiry Countdown</div>
+                    <div class="countdown-timer">
+                        <div class="countdown-item">
+                            <div class="countdown-value" id="days">000</div>
+                            <div class="countdown-label">Days</div>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="countdown-value" id="hours">00</div>
+                            <div class="countdown-label">Hours</div>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="countdown-value" id="minutes">00</div>
+                            <div class="countdown-label">Minutes</div>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="countdown-value" id="seconds">00</div>
+                            <div class="countdown-label">Seconds</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="content">
+            <div class="calculator-section">
+                <h2>Calculate Your Rebates</h2>
+                
+                <div class="input-group">
+                    <label for="registration-date">Vehicle Registration Date</label>
+                    <input type="date" id="registration-date" value="2019-04-16">
+                    <div class="input-note">Select the date your vehicle was registered</div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="coe-expiry-date">COE Expiry Date</label>
+                    <input type="date" id="coe-expiry-date" value="2029-04-15">
+                    <div class="input-note">COE typically expires 10 years after registration</div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="coe-price">Original COE Price (S$)</label>
+                    <input type="number" id="coe-price" min="0" step="1000" value="26659">
+                    <div class="input-note">Enter the original price paid for the COE</div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="omv">Open Market Value - OMV (S$)</label>
+                    <input type="number" id="omv" min="0" step="100" value="17365">
+                    <div class="input-note">The assessed value of the car at registration</div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="deregistration-date">Deregistration Date</label>
+                    <input type="date" id="deregistration-date">
+                    <div class="input-note">Select the date you plan to deregister your vehicle</div>
+                </div>
+                
+                <button class="btn-calculate" id="calculate-btn">Calculate Rebates</button>
+                
+                <div class="coe-calculation">
+                    <div class="calculation-title">COE Rebate Calculation (Official Method)</div>
+                    
+                    <div class="calculation-steps">
+                        <div class="calculation-step">
+                            <div class="step-label">Registration Date to COE Expiry</div>
+                            <div class="step-value" id="coe-period-display">10 years (120 months)</div>
+                        </div>
+                        <div class="calculation-step">
+                            <div class="step-label">Unused COE Period</div>
+                            <div class="step-value" id="unused-coe-period">0 years, 0 months, 0 days</div>
+                        </div>
+                        <div class="calculation-step">
+                            <div class="step-label">Unused Period in Decimal Months</div>
+                            <div class="step-value" id="unused-decimal-months">0.0 months</div>
+                        </div>
+                        <div class="calculation-step">
+                            <div class="step-label">Calculation Formula</div>
+                            <div class="step-value">(COE Price × Unused Months) ÷ 120</div>
+                        </div>
+                        <div class="calculation-step">
+                            <div class="step-label">Monthly Depreciation</div>
+                            <div class="step-value" id="monthly-depreciation">S$222.16 per month</div>
+                        </div>
+                    </div>
+                    
+                    <div class="rebate-amount">
+                        <div class="rebate-label">COE Rebate Amount</div>
+                        <div class="rebate-value" id="coe-rebate">S$0</div>
+                    </div>
+                </div>
+                
+                <div class="parf-calculation">
+                    <div class="calculation-title">PARF Rebate Calculation</div>
+                    
+                    <div class="calculation-steps">
+                        <div class="calculation-step">
+                            <div class="step-label">Open Market Value (OMV)</div>
+                            <div class="step-value" id="omv-calc">S$17,365</div>
+                        </div>
+                        <div class="calculation-step">
+                            <div class="step-label">Vehicle Age at Deregistration</div>
+                            <div class="step-value" id="parf-vehicle-age">0 years, 0 months</div>
+                        </div>
+                        <div class="calculation-step">
+                            <div class="step-label">PARF Eligibility</div>
+                            <div class="step-value" id="parf-eligibility">Not Eligible</div>
+                        </div>
+                        <div class="calculation-step">
+                            <div class="step-label">PARF Rebate Percentage</div>
+                            <div class="step-value" id="parf-percentage">0% of OMV</div>
+                        </div>
+                    </div>
+                    
+                    <div class="rebate-amount">
+                        <div class="rebate-label">PARF Rebate Amount</div>
+                        <div class="rebate-value" id="parf-rebate">S$0</div>
+                    </div>
+                </div>
+                
+                <div class="total-rebate">
+                    <div class="total-label">Total Rebate Amount</div>
+                    <div class="total-value" id="total-rebate">S$0</div>
+                </div>
+                
+                <div class="note">
+                    <p><strong>Note:</strong> This calculator provides an estimate based on LTA's formula for COE and PARF rebate calculations. The actual rebate amounts may vary based on administrative fees and other factors.</p>
+                </div>
+            </div>
+            
+            <div class="explanation-section">
+                <h2>Understanding COE & PARF Rebates</h2>
+                
+                <div class="official-example">
+                    <h4>Official COE Rebate Calculation Example (LTA)</h4>
+                    <p><strong>Scenario:</strong> Car with COE that costs $38,000, expires on 5 June 2020, deregistered on 2 May 2012.</p>
+                    <p><strong>Unused COE Duration:</strong> From 2 May 2012 to 5 June 2020 = 8 years, 1 month, 3 days = 97.1 months</p>
+                    <div class="formula">COE Rebate = ($38,000 × 97.1) ÷ 120 = $30,748</div>
+                    <p><strong>Key points:</strong></p>
+                    <ul>
+                        <li>1 month = 30 days for calculation purposes</li>
+                        <li>3 days = 0.1 month (3 ÷ 30)</li>
+                        <li>Total unused period = 97 months + 0.1 month = 97.1 months</li>
+                    </ul>
+                </div>
+                
+                <div class="scenario">
+                    <h3>COE Rebate Calculation (Official Method)</h3>
+                    <p>When you deregister your vehicle before the COE expires, you receive a rebate for the unused portion of your COE.</p>
+                    <div class="formula">COE Rebate = (Original COE Price × Unused Months) ÷ 120</div>
+                    <p><strong>Where:</strong></p>
+                    <ul>
+                        <li><strong>Original COE Price:</strong> The amount paid for the COE</li>
+                        <li><strong>Unused Months:</strong> Remaining period from deregistration to COE expiry (in decimal months)</li>
+                        <li><strong>120:</strong> Total months in a 10-year COE period</li>
+                    </ul>
+                    <p><strong>Days to Months Conversion:</strong> For calculation purposes, 1 month = 30 days</p>
+                    <div class="formula">Decimal Months = Whole Months + (Days ÷ 30)</div>
+                    <p>No COE rebate is given after the full 10-year period.</p>
+                </div>
+                
+                <div class="scenario">
+                    <h3>PARF Rebate Calculation</h3>
+                    <p>The PARF (Preferential Additional Registration Fee) rebate is based on your car's OMV and age at deregistration:</p>
+                    
+                    <table class="parf-table">
+                        <thead>
+                            <tr>
+                                <th>Vehicle Age at Deregistration</th>
+                                <th>PARF Rebate (% of OMV)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Not exceeding 5 years</td>
+                                <td>75% of OMV</td>
+                            </tr>
+                            <tr>
+                                <td>Above 5 but not exceeding 6 years</td>
+                                <td>70% of OMV</td>
+                            </tr>
+                            <tr>
+                                <td>Above 6 but not exceeding 7 years</td>
+                                <td>65% of OMV</td>
+                            </tr>
+                            <tr>
+                                <td>Above 7 but not exceeding 8 years</td>
+                                <td>60% of OMV</td>
+                            </tr>
+                            <tr>
+                                <td>Above 8 but not exceeding 9 years</td>
+                                <td>55% of OMV</td>
+                            </tr>
+                            <tr>
+                                <td>Above 9 but not exceeding 10 years</td>
+                                <td>50% of OMV</td>
+                            </tr>
+                            <tr>
+                                <td>Above 10 years</td>
+                                <td>No PARF rebate</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="formula">PARF Rebate = OMV × PARF Percentage</div>
+                    <p>PARF rebate is only applicable for vehicles deregistered within 10 years of registration.</p>
+                </div>
+                
+                <div class="scenario">
+                    <h3>Total Rebate Calculation</h3>
+                    <p>Your total rebate upon deregistration is the sum of COE rebate (if any) and PARF rebate (if eligible).</p>
+                    <div class="formula">Total Rebate = COE Rebate + PARF Rebate</div>
+                    <p>For vehicles older than 10 years, only COE rebate may apply if deregistered early.</p>
+                </div>
+                
+                <div class="scenario">
+                    <h3>Important Considerations</h3>
+                    <ul>
+                        <li>COE rebate calculation uses 30 days per month for decimal conversion</li>
+                        <li>PARF rebate is only for cars registered with COE</li>
+                        <li>Minimum PARF rebate is 50% of OMV for cars under 10 years</li>
+                        <li>Additional administrative fees may apply</li>
+                        <li>Check with LTA for the most current rates and regulations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Disclaimer: This calculator is for estimation purposes only. Actual rebate amounts are determined by the Land Transport Authority (LTA) of Singapore.</p>
+            <p>© 2023 COE & PARF Rebate Calculator | Not affiliated with LTA</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const registrationDateInput = document.getElementById('registration-date');
+            const coeExpiryDateInput = document.getElementById('coe-expiry-date');
+            const coePriceInput = document.getElementById('coe-price');
+            const omvInput = document.getElementById('omv');
+            const deregistrationDateInput = document.getElementById('deregistration-date');
+            const calculateBtn = document.getElementById('calculate-btn');
+            
+            // Display elements in header
+            const displayRegistrationDate = document.getElementById('display-registration-date');
+            const displayCoeExpiry = document.getElementById('display-coe-expiry');
+            const vehicleAgeTodayElement = document.getElementById('vehicle-age-today');
+            const remainingCoeElement = document.getElementById('remaining-coe');
+            
+            // Countdown elements
+            const daysElement = document.getElementById('days');
+            const hoursElement = document.getElementById('hours');
+            const minutesElement = document.getElementById('minutes');
+            const secondsElement = document.getElementById('seconds');
+            
+            // COE calculation elements
+            const coePeriodDisplayElement = document.getElementById('coe-period-display');
+            const unusedCoePeriodElement = document.getElementById('unused-coe-period');
+            const unusedDecimalMonthsElement = document.getElementById('unused-decimal-months');
+            const monthlyDepreciationElement = document.getElementById('monthly-depreciation');
+            const coeRebateElement = document.getElementById('coe-rebate');
+            
+            // PARF calculation elements
+            const omvCalcElement = document.getElementById('omv-calc');
+            const parfVehicleAgeElement = document.getElementById('parf-vehicle-age');
+            const parfEligibilityElement = document.getElementById('parf-eligibility');
+            const parfPercentageElement = document.getElementById('parf-percentage');
+            const parfRebateElement = document.getElementById('parf-rebate');
+            
+            // Total rebate element
+            const totalRebateElement = document.getElementById('total-rebate');
+            
+            // Set deregistration date input to today
+            const today = new Date();
+            deregistrationDateInput.value = today.toISOString().split('T')[0];
+            
+            // Auto-calculate COE expiry date when registration date changes
+            registrationDateInput.addEventListener('change', function() {
+                const registrationDate = new Date(this.value);
+                if (!isNaN(registrationDate.getTime())) {
+                    // Calculate COE expiry (10 years from registration)
+                    const coeExpiryDate = new Date(registrationDate);
+                    coeExpiryDate.setFullYear(coeExpiryDate.getFullYear() + 10);
+                    coeExpiryDateInput.value = coeExpiryDate.toISOString().split('T')[0];
+                    
+                    // Update display
+                    updateVehicleInfo();
+                    calculateRebate();
+                }
+            });
+            
+            // Auto-update when COE expiry date changes
+            coeExpiryDateInput.addEventListener('change', function() {
+                updateVehicleInfo();
+                calculateRebate();
+            });
+            
+            // Initialize calculator
+            updateVehicleInfo();
+            calculateRebate();
+            startCountdown();
+            
+            // Update countdown every second
+            function startCountdown() {
+                updateCountdown(); // Initial update
+                setInterval(updateCountdown, 1000);
+            }
+            
+            // Update the countdown timer
+            function updateCountdown() {
+                const coeExpiryDate = new Date(coeExpiryDateInput.value);
+                const now = new Date();
+                const timeRemaining = coeExpiryDate - now;
+                
+                if (timeRemaining < 0) {
+                    // COE has expired
+                    daysElement.textContent = '000';
+                    hoursElement.textContent = '00';
+                    minutesElement.textContent = '00';
+                    secondsElement.textContent = '00';
+                    
+                    // Show expired notice if not already shown
+                    if (!document.querySelector('.expired-notice')) {
+                        const expiredNotice = document.createElement('div');
+                        expiredNotice.className = 'expired-notice';
+                        expiredNotice.textContent = 'Your COE has expired. No COE rebate is available.';
+                        document.querySelector('.calculator-section').appendChild(expiredNotice);
+                    }
+                    return;
+                }
+                
+                // Calculate days, hours, minutes, seconds
+                const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+                
+                // Update display with leading zeros
+                daysElement.textContent = days.toString().padStart(3, '0');
+                hoursElement.textContent = hours.toString().padStart(2, '0');
+                minutesElement.textContent = minutes.toString().padStart(2, '0');
+                secondsElement.textContent = seconds.toString().padStart(2, '0');
+            }
+            
+            // Format date to display format (e.g., 16 April 2019)
+            function formatDateForDisplay(date) {
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                return date.toLocaleDateString('en-US', options);
+            }
+            
+            // Calculate vehicle age in years and months
+            function calculateVehicleAge(startDate, endDate) {
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                
+                // Calculate months difference
+                let months = (end.getFullYear() - start.getFullYear()) * 12;
+                months -= start.getMonth();
+                months += end.getMonth();
+                
+                // Adjust if end date day is less than start date day
+                if (end.getDate() < start.getDate()) {
+                    months--;
+                }
+                
+                const years = Math.floor(months / 12);
+                const remainingMonths = months % 12;
+                
+                return {
+                    years: years,
+                    months: months,
+                    remainingMonths: remainingMonths,
+                    formatted: `${years} years, ${remainingMonths} months`
+                };
+            }
+            
+            // Calculate unused COE period in years, months, days and decimal months
+            function calculateUnusedCoePeriod(deregistrationDate, coeExpiryDate) {
+                const dereg = new Date(deregistrationDate);
+                const expiry = new Date(coeExpiryDate);
+                
+                // If deregistration is after expiry, return 0
+                if (dereg >= expiry) {
+                    return {
+                        years: 0,
+                        months: 0,
+                        days: 0,
+                        decimalMonths: 0,
+                        formatted: "0 years, 0 months, 0 days"
+                    };
+                }
+                
+                // Calculate years, months, and days difference
+                let years = expiry.getFullYear() - dereg.getFullYear();
+                let months = expiry.getMonth() - dereg.getMonth();
+                let days = expiry.getDate() - dereg.getDate();
+                
+                // Adjust for negative days
+                if (days < 0) {
+                    months--;
+                    // Get days in previous month
+                    const prevMonth = new Date(expiry.getFullYear(), expiry.getMonth(), 0);
+                    days = prevMonth.getDate() - dereg.getDate() + expiry.getDate();
+                }
+                
+                // Adjust for negative months
+                if (months < 0) {
+                    years--;
+                    months += 12;
+                }
+                
+                // Calculate decimal months (using 30 days per month as per official example)
+                const decimalMonths = (years * 12) + months + (days / 30);
+                
+                return {
+                    years: years,
+                    months: months,
+                    days: days,
+                    decimalMonths: decimalMonths,
+                    formatted: `${years} years, ${months} months, ${days} days`
+                };
+            }
+            
+            // Calculate COE period in months
+            function calculateCoePeriod(registrationDate, coeExpiryDate) {
+                const start = new Date(registrationDate);
+                const end = new Date(coeExpiryDate);
+                
+                // Calculate months difference
+                let months = (end.getFullYear() - start.getFullYear()) * 12;
+                months -= start.getMonth();
+                months += end.getMonth();
+                
+                // Adjust if end date day is less than start date day
+                if (end.getDate() < start.getDate()) {
+                    months--;
+                }
+                
+                const years = Math.floor(months / 12);
+                const remainingMonths = months % 12;
+                
+                return {
+                    months: months,
+                    years: years,
+                    remainingMonths: remainingMonths,
+                    formatted: `${years} years (${months} months)`
+                };
+            }
+            
+            // Update vehicle information in header
+            function updateVehicleInfo() {
+                const registrationDate = new Date(registrationDateInput.value);
+                const coeExpiryDate = new Date(coeExpiryDateInput.value);
+                const today = new Date();
+                
+                // Update display dates
+                displayRegistrationDate.textContent = formatDateForDisplay(registrationDate);
+                displayCoeExpiry.textContent = formatDateForDisplay(coeExpiryDate);
+                
+                // Calculate vehicle age
+                const vehicleAge = calculateVehicleAge(registrationDate, today);
+                
+                // Calculate remaining COE period
+                const remainingCoe = calculateUnusedCoePeriod(today, coeExpiryDate);
+                
+                // Calculate total COE period
+                const coePeriod = calculateCoePeriod(registrationDate, coeExpiryDate);
+                coePeriodDisplayElement.textContent = coePeriod.formatted;
+                
+                vehicleAgeTodayElement.textContent = vehicleAge.formatted;
+                remainingCoeElement.textContent = remainingCoe.formatted;
+            }
+            
+            // Calculate PARF rebate based on vehicle age and OMV
+            function calculatePARFRebate(vehicleAgeMonths, omv) {
+                const vehicleAgeYears = vehicleAgeMonths / 12;
+                
+                // PARF rebate percentages based on LTA guidelines
+                let parfPercentage = 0;
+                let eligibility = "Not Eligible";
+                let percentageText = "0% of OMV";
+                
+                if (vehicleAgeYears <= 5) {
+                    parfPercentage = 0.75;
+                    eligibility = "Eligible (≤5 years)";
+                    percentageText = "75% of OMV";
+                } else if (vehicleAgeYears <= 6) {
+                    parfPercentage = 0.70;
+                    eligibility = "Eligible (5-6 years)";
+                    percentageText = "70% of OMV";
+                } else if (vehicleAgeYears <= 7) {
+                    parfPercentage = 0.65;
+                    eligibility = "Eligible (6-7 years)";
+                    percentageText = "65% of OMV";
+                } else if (vehicleAgeYears <= 8) {
+                    parfPercentage = 0.60;
+                    eligibility = "Eligible (7-8 years)";
+                    percentageText = "60% of OMV";
+                } else if (vehicleAgeYears <= 9) {
+                    parfPercentage = 0.55;
+                    eligibility = "Eligible (8-9 years)";
+                    percentageText = "55% of OMV";
+                } else if (vehicleAgeYears <= 10) {
+                    parfPercentage = 0.50;
+                    eligibility = "Eligible (9-10 years)";
+                    percentageText = "50% of OMV";
+                } else {
+                    parfPercentage = 0;
+                    eligibility = "Not Eligible (>10 years)";
+                    percentageText = "0% of OMV";
+                }
+                
+                const parfRebate = parfPercentage * omv;
+                
+                return {
+                    rebate: parfRebate,
+                    percentage: parfPercentage * 100,
+                    percentageText: percentageText,
+                    eligibility: eligibility
+                };
+            }
+            
+            // Event listeners
+            calculateBtn.addEventListener('click', calculateRebate);
+            deregistrationDateInput.addEventListener('change', calculateRebate);
+            coePriceInput.addEventListener('change', calculateRebate);
+            omvInput.addEventListener('change', calculateRebate);
+            
+            // Calculate the COE and PARF rebates
+            function calculateRebate() {
+                // Get input values
+                const registrationDate = new Date(registrationDateInput.value);
+                const coeExpiryDate = new Date(coeExpiryDateInput.value);
+                const coePrice = parseFloat(coePriceInput.value) || 0;
+                const omv = parseFloat(omvInput.value) || 0;
+                const deregistrationDate = new Date(deregistrationDateInput.value);
+                
+                // Update vehicle info in header
+                updateVehicleInfo();
+                
+                // Calculate vehicle age at deregistration
+                const vehicleAge = calculateVehicleAge(registrationDate, deregistrationDate);
+                
+                // Calculate unused COE period using official method
+                const unusedCoePeriod = calculateUnusedCoePeriod(deregistrationDate, coeExpiryDate);
+                
+                // Calculate total COE period in months
+                const totalCoePeriod = calculateCoePeriod(registrationDate, coeExpiryDate);
+                
+                // Calculate monthly depreciation
+                const monthlyDepreciation = coePrice / totalCoePeriod.months;
+                
+                // Calculate COE rebate using official method
+                let coeRebate = 0;
+                
+                // If deregistration is before COE expiry, calculate rebate
+                if (deregistrationDate < coeExpiryDate) {
+                    coeRebate = (coePrice * unusedCoePeriod.decimalMonths) / totalCoePeriod.months;
+                }
+                
+                // Round to 2 decimal places
+                coeRebate = Math.round(coeRebate * 100) / 100;
+                
+                // Calculate PARF rebate
+                const parfResult = calculatePARFRebate(vehicleAge.months, omv);
+                const parfRebate = Math.round(parfResult.rebate * 100) / 100;
+                
+                // Calculate total rebate
+                const totalRebate = Math.round((coeRebate + parfRebate) * 100) / 100;
+                
+                // Update COE calculation display
+                unusedCoePeriodElement.textContent = unusedCoePeriod.formatted;
+                unusedDecimalMonthsElement.textContent = `${unusedCoePeriod.decimalMonths.toFixed(1)} months`;
+                monthlyDepreciationElement.textContent = `S$${monthlyDepreciation.toFixed(2)} per month`;
+                coeRebateElement.textContent = `S$${coeRebate.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                
+                // Update PARF calculation display
+                omvCalcElement.textContent = `S$${omv.toLocaleString()}`;
+                parfVehicleAgeElement.textContent = vehicleAge.formatted;
+                parfEligibilityElement.textContent = parfResult.eligibility;
+                parfEligibilityElement.style.color = parfResult.eligibility.startsWith("Eligible") ? "#2e7d32" : "#d32f2f";
+                parfPercentageElement.textContent = parfResult.percentageText;
+                parfRebateElement.textContent = `S$${parfRebate.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                
+                // Update total rebate
+                totalRebateElement.textContent = `S$${totalRebate.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            }
+            
+            // Format currency inputs
+            coePriceInput.addEventListener('blur', function() {
+                const value = parseFloat(this.value);
+                if (!isNaN(value)) {
+                    this.value = value.toFixed(0);
+                }
+            });
+            
+            omvInput.addEventListener('blur', function() {
+                const value = parseFloat(this.value);
+                if (!isNaN(value)) {
+                    this.value = value.toFixed(0);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
