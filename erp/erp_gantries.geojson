@@ -1,0 +1,509 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.90332808,
+            1.3596108,
+            0
+          ],
+          [
+            103.90350589,
+            1.35950797,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "50",
+        "UNIQUE_ID": "850",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "KPE Southbound after Defu Flyover"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.91159258,
+            1.32865316,
+            0
+          ],
+          [
+            103.9116705,
+            1.3284749,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "65",
+        "UNIQUE_ID": "650",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "PIE westbound before Eunos Link"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.87057496,
+            1.3263922,
+            0
+          ],
+          [
+            103.87043691,
+            1.32624981,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "32",
+        "UNIQUE_ID": "320",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "PIE after Kallang Bahru on Woodsville Flyover"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.87043368,
+            1.32624805,
+            0
+          ],
+          [
+            103.87037873,
+            1.32619562,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "45",
+        "UNIQUE_ID": "450",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "PIE slip road to Bendemeer Road"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8646103,
+            1.3291173,
+            0
+          ],
+          [
+            103.86461333,
+            1.32905114,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "33",
+        "UNIQUE_ID": "330",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "CTE from Serangoon Road"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.86461435,
+            1.32905007,
+            0
+          ],
+          [
+            103.86461817,
+            1.32896248,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "42",
+        "UNIQUE_ID": "420",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "PIE into CTE Southbound"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.86045822,
+            1.32616379,
+            0
+          ],
+          [
+            103.8605999,
+            1.32601366,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "51",
+        "UNIQUE_ID": "510",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "CTE Northbound before exit to PIE"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.85163159,
+            1.31839072,
+            0
+          ],
+          [
+            103.85165168,
+            1.3183222,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "34",
+        "UNIQUE_ID": "340",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "CTE from Balestier Road"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.86192525,
+            1.33312011,
+            0
+          ],
+          [
+            103.86178207,
+            1.33318876,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "67",
+        "UNIQUE_ID": "670",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "PIE to CTE Northbound before Braddell Road"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.86208039,
+            1.33273528,
+            0
+          ],
+          [
+            103.86228061,
+            1.3327507,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "46",
+        "UNIQUE_ID": "460",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "CTE Northbound after PIE"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.86225991,
+            1.33336651,
+            0
+          ],
+          [
+            103.86257814,
+            1.33337827,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "31",
+        "UNIQUE_ID": "310",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "CTE after Braddell Road"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.85925495,
+            1.34654314,
+            0
+          ],
+          [
+            103.85951872,
+            1.34664074,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "35",
+        "UNIQUE_ID": "350",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "CTE before Braddell Road"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.82833519,
+            1.32765682,
+            0
+          ],
+          [
+            103.82829971,
+            1.32755326,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "38",
+        "UNIQUE_ID": "380",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "PIE to Changi / Whitley Road"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.81993393,
+            1.33077958,
+            0
+          ],
+          [
+            103.81986858,
+            1.33058814,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "37",
+        "UNIQUE_ID": "370",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "PIE to Changi after Adam Road Exit"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.86573993,
+            1.27469222,
+            0
+          ],
+          [
+            103.86580668,
+            1.27461378,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "92",
+        "UNIQUE_ID": "920",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "Marina Boulevard to MCE Eastbound"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.85643049,
+            1.27093829,
+            0
+          ],
+          [
+            103.85656066,
+            1.27116494,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "93",
+        "UNIQUE_ID": "930",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "MCE Eastbound before exit to Central Boulevard"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.79685296,
+            1.28683423,
+            0
+          ],
+          [
+            103.79675052,
+            1.28665254,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "36",
+        "UNIQUE_ID": "360",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "AYE to City before Alexandra Road"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.75878036,
+            1.31643174,
+            0
+          ],
+          [
+            103.75864803,
+            1.3163152,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "74",
+        "UNIQUE_ID": "740",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "Citybound AYE After Jurong Town Hall"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.76089912,
+            1.31515598,
+            0
+          ],
+          [
+            103.76081792,
+            1.31516959,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "52",
+        "UNIQUE_ID": "520",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "Clementi Avenue 6 into AYE (City)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.7663703,
+            1.30884224,
+            0
+          ],
+          [
+            103.76645181,
+            1.30880686,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "53",
+        "UNIQUE_ID": "530",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "Clementi Avenue 2 into AYE (City)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.77660077,
+            1.30103406,
+            0
+          ],
+          [
+            103.77670447,
+            1.30118869,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "41",
+        "UNIQUE_ID": "410",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "Tuasbound AYE After North Buona Vista"
+      }
+    }
+  ]
+}
