@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="apple-touch-icon" href="https://i.ibb.co/n87zRRhp/Alive-Brewing-Logo-2025.png">
+    <title>Redirecting to Alive Brewing...</title>
+    <style>
+        /* === RESET & BASE === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #1a1a2e;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #fff;
+            padding: 2rem;
+        }
+
+        /* === CARD === */
+        .card {
+            background: #16213e;
+            padding: 3rem 4rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .card h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #f5c842;
+        }
+
+        .card .subtitle {
+            font-size: 1rem;
+            color: #aaa;
+            margin-bottom: 2rem;
+        }
+
+        /* === PROGRESS BAR === */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: #2a3a5e;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #f5c842, #f5a842);
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+
+        /* === TIMER DISPLAY === */
+        .timer {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #f5c842;
+            margin-bottom: 0.5rem;
+        }
+
+        .timer-label {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 1.5rem;
+        }
+
+        /* === BUTTONS === */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #f5c842;
+            color: #1a1a2e;
+        }
+
+        .btn-primary:hover {
+            background: #f5d842;
+            transform: scale(1.02);
+        }
+
+        .btn-secondary {
+            background: #2a3a5e;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: #3a4a7e;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        /* === FOOTER === */
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: #555;
+        }
+
+        .footer a {
+            color: #f5c842;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 500px) {
+            .card {
+                padding: 2rem 1.5rem;
+            }
+            .card h1 {
+                font-size: 1.5rem;
+            }
+            .timer {
+                font-size: 2.5rem;
+            }
+            .button-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <!-- Icon -->
+        <div style="font-size: 4rem; margin-bottom: 0.5rem;">🍺</div>
+
+        <h1>Alive Brewing</h1>
+        <p class="subtitle">Singapore's Modern Craft Beer</p>
+
+        <!-- Progress bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- Timer -->
+        <div class="timer" id="timerDisplay">5</div>
+        <div class="timer-label">seconds until redirect</div>
+
+        <!-- Buttons -->
+        <div class="button-group">
+            <button class="btn btn-primary" id="redirectNowBtn">↗️ Redirect Now</button>
+            <button class="btn btn-danger" id="cancelBtn">✖ Cancel</button>
+        </div>
+
+        <div style="margin-top: 1rem; font-size: 0.85rem; color: #666;">
+            or <a href="https://alivebrewing.sg" target="_blank" id="directLink">click here to go directly</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        You will be redirected to <strong>alivebrewing.sg</strong>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // === CONFIGURATION ===
+            const REDIRECT_URL = 'https://alivebrewing.sg';
+            const COUNTDOWN_SECONDS = 10;
+
+            // === DOM REFS ===
+            const timerDisplay = document.getElementById('timerDisplay');
+            const progressBar = document.getElementById('progressBar');
+            const redirectNowBtn = document.getElementById('redirectNowBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const directLink = document.getElementById('directLink');
+
+            // === STATE ===
+            let remaining = COUNTDOWN_SECONDS;
+            let timerInterval = null;
+            let redirectTimeout = null;
+            let isCancelled = false;
+
+            // === UPDATE UI ===
+            function updateUI() {
+                timerDisplay.textContent = remaining;
+                const progress = ((COUNTDOWN_SECONDS - remaining) / COUNTDOWN_SECONDS) * 100;
+                progressBar.style.width = progress + '%';
+            }
+
+            // === PERFORM REDIRECT ===
+            function performRedirect() {
+                if (isCancelled) return;
+                // Clear any pending timers
+                clearInterval(timerInterval);
+                clearTimeout(redirectTimeout);
+                // Redirect
+                window.location.href = REDIRECT_URL;
+            }
+
+            // === START COUNTDOWN ===
+            function startCountdown() {
+                // Reset state
+                isCancelled = false;
+                remaining = COUNTDOWN_SECONDS;
+                updateUI();
+
+                // Clear any existing timers
+                clearInterval(timerInterval);
+                clearTimeout(redirectTimeout);
+
+                // Set the redirect timeout
+                redirectTimeout = setTimeout(performRedirect, COUNTDOWN_SECONDS * 1000);
+
+                // Start the ticker
+                timerInterval = setInterval(function() {
+                    remaining -= 1;
+                    updateUI();
+
+                    if (remaining <= 0) {
+                        clearInterval(timerInterval);
+                        // The redirectTimeout will handle the actual redirect
+                    }
+                }, 1000);
+            }
+
+            // === CANCEL REDIRECT ===
+            function cancelRedirect() {
+                isCancelled = true;
+                clearInterval(timerInterval);
+                clearTimeout(redirectTimeout);
+                timerDisplay.textContent = '⛔';
+                progressBar.style.width = '100%';
+                progressBar.style.background = '#e74c3c';
+                timerDisplay.style.color = '#e74c3c';
+
+                // Update button text
+                cancelBtn.textContent = '↻ Restart';
+                cancelBtn.className = 'btn btn-primary';
+                cancelBtn.onclick = function() {
+                    // Reset UI
+                    progressBar.style.background = 'linear-gradient(90deg, #f5c842, #f5a842)';
+                    timerDisplay.style.color = '#f5c842';
+                    cancelBtn.textContent = '✖ Cancel';
+                    cancelBtn.className = 'btn btn-danger';
+                    cancelBtn.onclick = cancelRedirect;
+                    startCountdown();
+                };
+            }
+
+            // === EVENT: Redirect Now ===
+            redirectNowBtn.addEventListener('click', function() {
+                performRedirect();
+            });
+
+            // === EVENT: Cancel ===
+            cancelBtn.addEventListener('click', cancelRedirect);
+
+            // === EVENT: Direct link ===
+            directLink.addEventListener('click', function(e) {
+                // Cancel the redirect when user manually clicks the link
+                clearInterval(timerInterval);
+                clearTimeout(redirectTimeout);
+                // Let the link work normally
+                return true;
+            });
+
+            // === START ON PAGE LOAD ===
+            startCountdown();
+
+        })();
+    </script>
+
+</body>
+</html>
