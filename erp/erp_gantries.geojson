@@ -22,7 +22,6 @@
         "GNTRY_NUM": "50",
         "UNIQUE_ID": "850",
         "FMEL_UPD_D": "20190703163313",
-	"DISPLAY": "false",
         "GANTRY_NAME": "KPE Southbound after Defu Flyover"
       }
     },
@@ -47,7 +46,6 @@
         "GNTRY_NUM": "65",
         "UNIQUE_ID": "650",
         "FMEL_UPD_D": "20190703163313",
-	"DISPLAY": "false",
         "GANTRY_NAME": "PIE westbound before Eunos Link"
       }
     },
