@@ -22,6 +22,7 @@
         "GNTRY_NUM": "50",
         "UNIQUE_ID": "850",
         "FMEL_UPD_D": "20190703163313",
+	"DISPLAY": "false",
         "GANTRY_NAME": "KPE Southbound after Defu Flyover"
       }
     },
@@ -46,6 +47,7 @@
         "GNTRY_NUM": "65",
         "UNIQUE_ID": "650",
         "FMEL_UPD_D": "20190703163313",
+	"DISPLAY": "false",
         "GANTRY_NAME": "PIE westbound before Eunos Link"
       }
     },
@@ -503,6 +505,281 @@
         "UNIQUE_ID": "410",
         "FMEL_UPD_D": "20190703163313",
         "GANTRY_NAME": "Tuasbound AYE After North Buona Vista"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.84314106,
+            1.30058418,
+            0
+          ],
+          [
+            103.84324607,
+            1.30055249,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "21",
+        "UNIQUE_ID": "210",
+        "INC_CRC": "Orchard Cordon",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "Buyong Road"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8420018,
+            1.30166655,
+            0
+          ],
+          [
+            103.84197307,
+            1.30157646,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "22",
+        "UNIQUE_ID": "220",
+        "INC_CRC": "Orchard Cordon",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "Kramat Road"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.83762044,
+            1.30574904,
+            0
+          ],
+          [
+            103.83767436,
+            1.30564672,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "27",
+        "UNIQUE_ID": "270",
+        "INC_CRC": "Orchard Cordon",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "Cairnhill Road"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.83219798,
+            1.30472381,
+            0
+          ],
+          [
+            103.83228124,
+            1.30486645,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "13",
+        "UNIQUE_ID": "130",
+        "INC_CRC": "Orchard Cordon",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "Orchard Road"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.83258863,
+            1.30357322,
+            0
+          ],
+          [
+            103.83269099,
+            1.30347816,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "14",
+        "UNIQUE_ID": "140",
+        "INC_CRC": "Orchard Cordon",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "Orchard Turn"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.83487943,
+            1.30067556,
+            0
+          ],
+          [
+            103.83499465,
+            1.30060871,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "4",
+        "UNIQUE_ID": "040",
+        "INC_CRC": "Orchard Cordon",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "Orchard Link"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.83977612,
+            1.29955952,
+            0
+          ],
+          [
+            103.83988535,
+            1.29946754,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "15",
+        "UNIQUE_ID": "150",
+        "INC_CRC": "Orchard Cordon",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "Killiney Road"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.84133891,
+            1.29926874,
+            0
+          ],
+          [
+            103.84142718,
+            1.29923984,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "12",
+        "UNIQUE_ID": "120",
+        "INC_CRC": "Orchard Cordon",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "Oxley Road"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.84377266,
+            1.29770639,
+            0
+          ],
+          [
+            103.84365026,
+            1.29770048,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "26",
+        "UNIQUE_ID": "260",
+        "INC_CRC": "Orchard Cordon",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "Clemenceau Ave"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.84635544,
+            1.29768453,
+            0
+          ],
+          [
+            103.8464302,
+            1.29778079,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "49",
+        "UNIQUE_ID": "490",
+        "INC_CRC": "Orchard Cordon",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "Fort Canning Tunnel"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.84793865,
+            1.29795807,
+            0
+          ],
+          [
+            103.84804804,
+            1.29809204,
+            0
+          ]
+        ]
+      },
+      "properties": {
+        "GNTRY_NUM": "47",
+        "UNIQUE_ID": "470",
+        "INC_CRC": "Orchard Cordon",
+        "FMEL_UPD_D": "20190703163313",
+        "GANTRY_NAME": "Orchard Road after YMCA"
       }
     }
   ]
