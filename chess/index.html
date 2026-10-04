@@ -677,7 +677,7 @@
                     type="text"
                     id="labelInput"
                     class="label-input"
-                    placeholder="e.g., My Club Champs"
+                    placeholder="e.g., 2026 X Rapid"
                     maxlength="60"
                 >
             </div>
@@ -737,7 +737,7 @@
                         title="Zoom out"
                         aria-label="Zoom out"
                     >−</button>
-                    <span class="zoom-level" id="zoomLevel">100%</span>
+                    <span class="zoom-level" id="zoomLevel">50%</span>
                     <button
                         id="zoomInBtn"
                         onclick="changeZoom(0.1)"
@@ -789,7 +789,7 @@
         const ZOOM_MAX = 1.5;
         const ZOOM_STEP = 0.1;
         const ZOOM_KEY = 'chessViewer.zoom';
-        let zoom = 1.0;
+        let zoom = 0.5;
 
         /* Desktop viewport width to simulate inside the iframe */
         const DESKTOP_WIDTH = 1100;
