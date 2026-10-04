@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#3498db">
 <link rel="apple-touch-icon" href="https://i.ibb.co/7d38hKZ8/chess.png">
-    <title>Chess Tournament Viewer</title>
+    <title>Chess Results</title>
     <style>
         * {
             box-sizing: border-box;
@@ -295,13 +295,88 @@
             color: #fff;
         }
 
+        /* ---------- Viewer toolbar (zoom only) ---------- */
+        .viewer-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            background: var(--card);
+            padding: 10px 15px;
+            border-radius: 10px 10px 0 0;
+            border-bottom: 1px solid #f1f2f6;
+        }
+
+        .viewer-toolbar-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #576574;
+        }
+
+        .viewer-toolbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .zoom-controls {
+            display: inline-flex;
+            align-items: center;
+            background: var(--chip-bg);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .zoom-controls button {
+            background: transparent;
+            color: var(--text);
+            border: none;
+            width: 36px;
+            height: 36px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 0;
+            border-radius: 0;
+            cursor: pointer;
+        }
+
+        .zoom-controls button:hover {
+            background: var(--chip-hover);
+        }
+
+        .zoom-controls button:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .zoom-controls .zoom-level {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text);
+            min-width: 46px;
+            text-align: center;
+            padding: 0 4px;
+        }
+
+        /* ---------- Frame wrapper with horizontal scroll ---------- */
         .frame-wrapper {
             background: var(--card);
-            border-radius: 10px;
+            border-radius: 0 0 10px 10px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            overflow: hidden;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
             position: relative;
             min-height: 600px;
+        }
+
+        /* Scaled iframe host */
+        .iframe-scaler {
+            transform-origin: top left;
+            transition: transform 0.15s ease-out;
         }
 
         iframe {
@@ -341,35 +416,6 @@
             display: none !important;
         }
 
-        /* Collapsible quick-access on mobile only */
-        .quick-access-header {
-            display: none;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            background: none;
-            border: none;
-            color: var(--text);
-            padding: 4px 0;
-            font-size: 0.9rem;
-            font-weight: 700;
-            cursor: pointer;
-            height: auto;
-        }
-
-        .quick-access-header .arrow {
-            transition: transform 0.2s;
-            color: var(--text-muted);
-        }
-
-        .quick-access.collapsed .quick-access-body {
-            display: none;
-        }
-
-        .quick-access.collapsed .quick-access-header .arrow {
-            transform: rotate(-90deg);
-        }
-
         /* ---------- Tablet ---------- */
         @media (max-width: 900px) {
             .field select.tournament-select {
@@ -404,17 +450,9 @@
                 width: 100%;
             }
 
-            /* Quick access: collapsible */
+            /* Quick access: compact */
             .quick-access {
                 padding: 12px 15px;
-            }
-
-            .quick-access-header {
-                display: flex;
-            }
-
-            .quick-access.collapsed .quick-access-body {
-                display: none;
             }
 
             /* Controls: full-width vertical stack */
@@ -423,9 +461,6 @@
                 align-items: stretch;
                 padding: 15px;
                 gap: 12px;
-                position: sticky;
-                top: 0;
-                z-index: 10;
             }
 
             .field {
@@ -437,11 +472,10 @@
             .field select.tournament-select,
             .field input.label-input {
                 width: 100%;
-                font-size: 16px; /* prevents iOS zoom-on-focus */
+                font-size: 16px;
                 min-height: 44px;
             }
 
-            /* Buttons: full width, taller for touch */
             .controls button {
                 width: 100%;
                 height: 48px;
@@ -453,9 +487,6 @@
                 display: grid;
                 grid-template-columns: 1fr 1fr 1fr;
                 gap: 6px;
-                position: sticky;
-                top: 0;
-                z-index: 5;
             }
 
             .view-tabs button {
@@ -490,7 +521,32 @@
                 min-height: 36px;
             }
 
-            /* Iframe: dynamic viewport height */
+            /* Viewer toolbar */
+            .viewer-toolbar {
+                padding: 10px 12px;
+            }
+
+            .viewer-toolbar-label {
+                display: none;
+            }
+
+            .viewer-toolbar-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .zoom-controls button {
+                width: 44px;
+                height: 44px;
+                font-size: 1.2rem;
+            }
+
+            .zoom-controls .zoom-level {
+                min-width: 52px;
+                font-size: 0.85rem;
+            }
+
+            /* Frame wrapper keeps min-height for placeholder */
             .frame-wrapper {
                 min-height: auto;
             }
@@ -540,6 +596,10 @@
                 font-size: 0.75rem;
             }
 
+            .viewer-toolbar {
+                padding: 6px 10px;
+            }
+
             iframe {
                 height: 60dvh;
             }
@@ -567,23 +627,17 @@
             </a>
         </div>
 
-        <div class="quick-access" id="quickAccess">
-            <button class="quick-access-header" onclick="toggleQuickAccess()">
-                <span>⭐ Favourites &amp; Recent</span>
-                <span class="arrow">▼</span>
-            </button>
-            <div class="quick-access-body">
-                <div class="quick-access-row">
-                    <span class="quick-access-label">⭐ Favourites</span>
-                    <div id="favouritesList">
-                        <span class="chip-empty">No favourites yet</span>
-                    </div>
+        <div class="quick-access">
+            <div class="quick-access-row">
+                <span class="quick-access-label">⭐ Favourites</span>
+                <div id="favouritesList">
+                    <span class="chip-empty">No favourites yet</span>
                 </div>
-                <div class="quick-access-row">
-                    <span class="quick-access-label">🕘 Recent</span>
-                    <div id="recentList">
-                        <span class="chip-empty">No recent tournaments</span>
-                    </div>
+            </div>
+            <div class="quick-access-row">
+                <span class="quick-access-label">🕘 Recent</span>
+                <div id="recentList">
+                    <span class="chip-empty">No recent tournaments</span>
                 </div>
             </div>
         </div>
@@ -672,15 +726,38 @@
             <button onclick="setRound(9)">R9</button>
         </div>
 
-        <div class="frame-wrapper">
+        <!-- Viewer toolbar: zoom only -->
+        <div class="viewer-toolbar">
+            <span class="viewer-toolbar-label">Viewer</span>
+            <div class="viewer-toolbar-actions">
+                <div class="zoom-controls">
+                    <button
+                        id="zoomOutBtn"
+                        onclick="changeZoom(-0.1)"
+                        title="Zoom out"
+                        aria-label="Zoom out"
+                    >−</button>
+                    <span class="zoom-level" id="zoomLevel">100%</span>
+                    <button
+                        id="zoomInBtn"
+                        onclick="changeZoom(0.1)"
+                        title="Zoom in"
+                        aria-label="Zoom in"
+                    >+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="frame-wrapper" id="frameWrapper">
             <div class="placeholder" id="placeholder">
                 Select an SGP tournament or enter a tournament ID, then click "Load".
             </div>
-            <iframe
-                id="resultsFrame"
-                style="display: none;"
-                title="Chess Tournament Data"
-            ></iframe>
+            <div class="iframe-scaler" id="iframeScaler" style="display: none;">
+                <iframe
+                    id="resultsFrame"
+                    title="Chess Tournament Data"
+                ></iframe>
+            </div>
         </div>
 
         <div class="status" id="status"></div>
@@ -689,6 +766,8 @@
     <script>
         /* ---------------- Element references ---------------- */
         const frame = document.getElementById('resultsFrame');
+        const frameWrapper = document.getElementById('frameWrapper');
+        const iframeScaler = document.getElementById('iframeScaler');
         const placeholder = document.getElementById('placeholder');
         const statusEl = document.getElementById('status');
         const tournamentInput = document.getElementById('tournamentId');
@@ -699,14 +778,25 @@
         const favBtn = document.getElementById('favBtn');
         const favouritesList = document.getElementById('favouritesList');
         const recentList = document.getElementById('recentList');
-        const quickAccess = document.getElementById('quickAccess');
+        const zoomLevelEl = document.getElementById('zoomLevel');
+        const zoomInBtn = document.getElementById('zoomInBtn');
+        const zoomOutBtn = document.getElementById('zoomOutBtn');
 
         let currentView = 'players';
+
+        /* ---------------- Zoom state ---------------- */
+        const ZOOM_MIN = 0.4;
+        const ZOOM_MAX = 1.5;
+        const ZOOM_STEP = 0.1;
+        const ZOOM_KEY = 'chessViewer.zoom';
+        let zoom = 1.0;
+
+        /* Desktop viewport width to simulate inside the iframe */
+        const DESKTOP_WIDTH = 1100;
 
         /* ---------------- localStorage keys ---------------- */
         const FAV_KEY = 'chessViewer.favourites';
         const RECENT_KEY = 'chessViewer.recent';
-        const COLLAPSE_KEY = 'chessViewer.quickAccessCollapsed';
         const RECENT_LIMIT = 6;
 
         /* ---------------- Storage helpers ---------------- */
@@ -734,21 +824,55 @@
             localStorage.setItem(RECENT_KEY, JSON.stringify(list));
         }
 
-        /* ---------------- Quick-access collapse ---------------- */
-        function toggleQuickAccess() {
-            quickAccess.classList.toggle('collapsed');
-            const collapsed = quickAccess.classList.contains('collapsed');
+        function loadZoom() {
             try {
-                localStorage.setItem(COLLAPSE_KEY, collapsed ? '1' : '0');
+                const saved = parseFloat(localStorage.getItem(ZOOM_KEY));
+                if (!isNaN(saved) && saved >= ZOOM_MIN && saved <= ZOOM_MAX) {
+                    zoom = saved;
+                }
             } catch (e) { /* ignore */ }
         }
 
-        function restoreQuickAccessState() {
+        function saveZoom() {
             try {
-                if (localStorage.getItem(COLLAPSE_KEY) === '1') {
-                    quickAccess.classList.add('collapsed');
-                }
+                localStorage.setItem(ZOOM_KEY, String(zoom));
             } catch (e) { /* ignore */ }
+        }
+
+        /* ---------------- Zoom logic ---------------- */
+        function changeZoom(delta) {
+            zoom = Math.round((zoom + delta) * 10) / 10;
+            zoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoom));
+            applyZoom();
+            saveZoom();
+        }
+
+        function applyZoom() {
+            // Only apply scaling on narrow (mobile) viewports.
+            const isMobile = window.matchMedia('(max-width: 600px)').matches;
+
+            if (isMobile) {
+                // Force the iframe to render at a desktop width, then scale it down.
+                iframeScaler.style.width = DESKTOP_WIDTH + 'px';
+                iframeScaler.style.transform = 'scale(' + zoom + ')';
+
+                // Compensate so the wrapper only occupies the scaled height.
+                const frameHeight = frame.offsetHeight || 750;
+                iframeScaler.style.height = (frameHeight * zoom) + 'px';
+
+                // Also shrink the iframe's own visual height to match
+                frame.style.height = (frameHeight / zoom) + 'px';
+            } else {
+                // Desktop: no scaling, natural layout
+                iframeScaler.style.width = '';
+                iframeScaler.style.transform = '';
+                iframeScaler.style.height = '';
+                frame.style.height = '';
+            }
+
+            zoomLevelEl.textContent = Math.round(zoom * 100) + '%';
+            zoomInBtn.disabled = zoom >= ZOOM_MAX;
+            zoomOutBtn.disabled = zoom <= ZOOM_MIN;
         }
 
         /* ---------------- Label & type resolution ---------------- */
@@ -999,12 +1123,16 @@
             statusEl.className = 'status';
 
             placeholder.style.display = 'none';
-            frame.style.display = 'block';
+            iframeScaler.style.display = 'block';
             frame.src = url;
+
+            // Reapply zoom on the new content
+            applyZoom();
 
             frame.onload = function () {
                 statusEl.textContent = `Loaded ${label} for tournament ${tnr}.`;
                 statusEl.className = 'status success';
+                applyZoom();
             };
 
             addToRecent(tnr);
@@ -1017,8 +1145,12 @@
             return 'Round ' + value;
         }
 
+        /* ---------------- Viewport changes ---------------- */
+        window.addEventListener('resize', applyZoom);
+
         /* ---------------- Initial render ---------------- */
-        restoreQuickAccessState();
+        loadZoom();
+        applyZoom();
         renderFavourites();
         renderRecent();
         updateFavButton();
