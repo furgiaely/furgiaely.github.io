@@ -244,30 +244,6 @@
             color: #fff;
         }
 
-        .quick-rounds {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-        }
-
-        .quick-rounds button {
-            padding: 6px 14px;
-            font-size: 0.85rem;
-            background: var(--chip-bg);
-            color: var(--text);
-            height: auto;
-        }
-
-        .quick-rounds button:hover {
-            background: var(--chip-hover);
-        }
-
-        .quick-rounds button.active {
-            background: var(--primary);
-            color: #fff;
-        }
-
         /* ---------- Viewer toolbar (zoom only) ---------- */
         .viewer-toolbar {
             display: flex;
@@ -448,7 +424,6 @@
                 gap: 6px;
             }
 
-            /* Make the last (odd) tab span both columns */
             .view-tabs button:last-child:nth-child(odd) {
                 grid-column: 1 / -1;
             }
@@ -457,18 +432,6 @@
                 padding: 10px 6px;
                 font-size: 0.8rem;
                 text-align: center;
-                min-height: 44px;
-            }
-
-            .quick-rounds {
-                display: grid;
-                grid-template-columns: repeat(5, 1fr);
-                gap: 6px;
-            }
-
-            .quick-rounds button {
-                padding: 10px 4px;
-                font-size: 0.85rem;
                 min-height: 44px;
             }
 
@@ -549,8 +512,7 @@
                 font-size: 0.9rem;
             }
 
-            .view-tabs button,
-            .quick-rounds button {
+            .view-tabs button {
                 min-height: 36px;
                 padding: 6px 8px;
                 font-size: 0.75rem;
@@ -603,7 +565,7 @@
   Art values used by this viewer:
     Player List  -> individual: art=3   | team: art=15
     Rankings     -> individual: art=1   | team: art=16
-    Pairings     -> both: art=2&rd=N
+    Pairings     -> both: art=2 (current round)
   Add new tournaments at the top so they appear first.
 -->
                 <select id="sgpTournamentSelect" class="tournament-select" onchange="onSgpSelect(this.value)">
@@ -634,22 +596,6 @@
                 >
             </div>
 
-            <div class="field">
-                <label for="roundSelect">Round (for pairings)</label>
-                <select id="roundSelect">
-                    <option value="-1">Current round</option>
-                    <option value="1">Round 1</option>
-                    <option value="2">Round 2</option>
-                    <option value="3">Round 3</option>
-                    <option value="4">Round 4</option>
-                    <option value="5">Round 5</option>
-                    <option value="6">Round 6</option>
-                    <option value="7">Round 7</option>
-                    <option value="8">Round 8</option>
-                    <option value="9">Round 9</option>
-                </select>
-            </div>
-
             <button onclick="loadView()">Load</button>
             <button id="favBtn" class="btn-fav" onclick="toggleFavourite()">☆ Favourite</button>
         </div>
@@ -659,7 +605,7 @@
                 👥 Player List
             </button>
             <button data-view="rankings" onclick="setView('rankings')">
-                🏆 Rankings
+                🏆 Starting Rank
             </button>
             <button data-view="pairings" onclick="setView('pairings')">
                 ⚔ Pairings
@@ -670,18 +616,6 @@
             <button data-view="search" onclick="setView('search')">
                 🔍 Search Player
             </button>
-        </div>
-
-        <div class="quick-rounds hidden" id="quickRounds">
-            <button onclick="setRound(1)">R1</button>
-            <button onclick="setRound(2)">R2</button>
-            <button onclick="setRound(3)">R3</button>
-            <button onclick="setRound(4)">R4</button>
-            <button onclick="setRound(5)">R5</button>
-            <button onclick="setRound(6)">R6</button>
-            <button onclick="setRound(7)">R7</button>
-            <button onclick="setRound(8)">R8</button>
-            <button onclick="setRound(9)">R9</button>
         </div>
 
         <!-- Viewer toolbar: zoom only -->
@@ -730,8 +664,6 @@
         const statusEl = document.getElementById('status');
         const tournamentInput = document.getElementById('tournamentId');
         const labelInput = document.getElementById('labelInput');
-        const roundSelect = document.getElementById('roundSelect');
-        const quickRounds = document.getElementById('quickRounds');
         const sgpSelect = document.getElementById('sgpTournamentSelect');
         const favBtn = document.getElementById('favBtn');
         const favouritesList = document.getElementById('favouritesList');
@@ -752,10 +684,10 @@
         const DESKTOP_WIDTH = 1100;
 
         /* SGP tournament list URL (Chess-Results federation page) */
-        const SGP_EVENTS_URL = 'https://chess-results.com/fed.aspx?lan=1&fed=SGP&turdet=NO&iframe=YES';
+        const SGP_EVENTS_URL = 'https://chess-results.com/fed.aspx?lan=1&fed=SGP';
 
         /* Player search URL (Chess-Results player search page) */
-        const PLAYER_SEARCH_URL = 'https://chess-results.com/SpielerSuche.aspx?lan=1&turdet=YES&iframe=YES';
+        const PLAYER_SEARCH_URL = 'https://chess-results.com/SpielerSuche.aspx?lan=1';
 
         /* ---------------- localStorage keys ---------------- */
         const FAV_KEY = 'chessViewer.favourites';
@@ -1006,10 +938,6 @@
             updateFavButton();
         });
 
-        roundSelect.addEventListener('change', function () {
-            highlightQuickRound(parseInt(roundSelect.value, 10));
-        });
-
         /* ---------------- SGP dropdown ---------------- */
         function onSgpSelect(value) {
             if (!value) return;
@@ -1033,8 +961,6 @@
                 btn.classList.toggle('active', btn.dataset.view === view);
             });
 
-            quickRounds.classList.toggle('hidden', view !== 'pairings');
-
             // Events tab: load the SGP federation page
             if (view === 'events') {
                 loadEventsPage();
@@ -1051,19 +977,6 @@
             if (tournamentInput.value.trim()) {
                 loadView();
             }
-        }
-
-        function setRound(round) {
-            roundSelect.value = round;
-            highlightQuickRound(round);
-            loadView();
-        }
-
-        function highlightQuickRound(round) {
-            document.querySelectorAll('#quickRounds button').forEach(function (btn) {
-                const btnRound = parseInt(btn.textContent.replace('R', ''), 10);
-                btn.classList.toggle('active', btnRound === round);
-            });
         }
 
         /* ---------------- Events page loader ---------------- */
@@ -1125,9 +1038,9 @@
                 url += isTeam ? '&art=16' : '&art=1';
                 label = isTeam ? 'team rankings' : 'rankings';
             } else if (currentView === 'pairings') {
-                const rd = roundSelect.value;
-                url += `&art=2&rd=${rd}`;
-                label = `pairings (${formatRoundLabel(rd)})`;
+                // Current round only
+                url += '&art=2&rd=-1';
+                label = 'pairings (current round)';
             }
 
             statusEl.textContent = `Loading ${label} for tournament ${tnr}...`;
@@ -1147,12 +1060,6 @@
 
             addToRecent(tnr);
             updateFavButton();
-        }
-
-        function formatRoundLabel(rd) {
-            const value = parseInt(rd, 10);
-            if (value === -1) return 'current round';
-            return 'Round ' + value;
         }
 
         /* ---------------- Viewport changes ---------------- */
