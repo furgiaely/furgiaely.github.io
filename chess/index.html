@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#3498db">
-<link rel="apple-touch-icon" href="https://i.ibb.co/7d38hKZ8/chess.png">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/7d38hKZ8/chess.png">
     <title>Chess Results</title>
     <style>
         * {
@@ -61,34 +61,7 @@
         }
 
         .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
             margin-bottom: 15px;
-        }
-
-        .player-search-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 16px;
-            background: #fff;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--primary);
-            text-decoration: none;
-            transition: all 0.2s;
-            min-height: 44px;
-        }
-
-        .player-search-link:hover {
-            background: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
         }
 
         .controls {
@@ -373,7 +346,6 @@
             min-height: 600px;
         }
 
-        /* Scaled iframe host */
         .iframe-scaler {
             transform-origin: top left;
             transition: transform 0.15s ease-out;
@@ -439,23 +411,10 @@
                 margin-bottom: 12px;
             }
 
-            /* Top bar: stack link below title */
-            .top-bar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .player-search-link {
-                justify-content: center;
-                width: 100%;
-            }
-
-            /* Quick access: compact */
             .quick-access {
                 padding: 12px 15px;
             }
 
-            /* Controls: full-width vertical stack */
             .controls {
                 flex-direction: column;
                 align-items: stretch;
@@ -482,11 +441,16 @@
                 font-size: 1rem;
             }
 
-            /* View tabs: equal-width row */
+            /* View tabs: 2-column grid for 5 tabs */
             .view-tabs {
                 display: grid;
-                grid-template-columns: 1fr 1fr 1fr;
+                grid-template-columns: 1fr 1fr;
                 gap: 6px;
+            }
+
+            /* Make the last (odd) tab span both columns */
+            .view-tabs button:last-child:nth-child(odd) {
+                grid-column: 1 / -1;
             }
 
             .view-tabs button {
@@ -496,7 +460,6 @@
                 min-height: 44px;
             }
 
-            /* Quick rounds: 5 per row */
             .quick-rounds {
                 display: grid;
                 grid-template-columns: repeat(5, 1fr);
@@ -509,7 +472,6 @@
                 min-height: 44px;
             }
 
-            /* Quick-access rows: label above chips */
             .quick-access-label {
                 min-width: 100%;
                 font-size: 0.75rem;
@@ -521,7 +483,6 @@
                 min-height: 36px;
             }
 
-            /* Viewer toolbar */
             .viewer-toolbar {
                 padding: 10px 12px;
             }
@@ -546,7 +507,6 @@
                 font-size: 0.85rem;
             }
 
-            /* Frame wrapper keeps min-height for placeholder */
             .frame-wrapper {
                 min-height: auto;
             }
@@ -617,14 +577,6 @@
                     Select a Singapore tournament or enter any Chess-Results tournament ID.
                 </p>
             </div>
-            <a
-                class="player-search-link"
-                href="https://chess-results.com/SpielerSuche.aspx?lan=1"
-                target="_blank"
-                rel="noopener"
-            >
-                🔍 Search player by FIDE ID / Name
-            </a>
         </div>
 
         <div class="quick-access">
@@ -712,6 +664,12 @@
             <button data-view="pairings" onclick="setView('pairings')">
                 ⚔ Pairings
             </button>
+            <button data-view="events" onclick="setView('events')">
+                📅 Tournaments
+            </button>
+            <button data-view="search" onclick="setView('search')">
+                🔍 Search Player
+            </button>
         </div>
 
         <div class="quick-rounds hidden" id="quickRounds">
@@ -787,12 +745,17 @@
         /* ---------------- Zoom state ---------------- */
         const ZOOM_MIN = 0.4;
         const ZOOM_MAX = 1.5;
-        const ZOOM_STEP = 0.1;
         const ZOOM_KEY = 'chessViewer.zoom';
         let zoom = 0.5;
 
         /* Desktop viewport width to simulate inside the iframe */
         const DESKTOP_WIDTH = 1100;
+
+        /* SGP tournament list URL (Chess-Results federation page) */
+        const SGP_EVENTS_URL = 'https://chess-results.com/fed.aspx?lan=1&fed=SGP&turdet=NO&iframe=YES';
+
+        /* Player search URL (Chess-Results player search page) */
+        const PLAYER_SEARCH_URL = 'https://chess-results.com/SpielerSuche.aspx?lan=1&turdet=YES&iframe=YES';
 
         /* ---------------- localStorage keys ---------------- */
         const FAV_KEY = 'chessViewer.favourites';
@@ -848,22 +811,16 @@
         }
 
         function applyZoom() {
-            // Only apply scaling on narrow (mobile) viewports.
             const isMobile = window.matchMedia('(max-width: 600px)').matches;
 
             if (isMobile) {
-                // Force the iframe to render at a desktop width, then scale it down.
                 iframeScaler.style.width = DESKTOP_WIDTH + 'px';
                 iframeScaler.style.transform = 'scale(' + zoom + ')';
 
-                // Compensate so the wrapper only occupies the scaled height.
                 const frameHeight = frame.offsetHeight || 750;
                 iframeScaler.style.height = (frameHeight * zoom) + 'px';
-
-                // Also shrink the iframe's own visual height to match
                 frame.style.height = (frameHeight / zoom) + 'px';
             } else {
-                // Desktop: no scaling, natural layout
                 iframeScaler.style.width = '';
                 iframeScaler.style.transform = '';
                 iframeScaler.style.height = '';
@@ -1060,7 +1017,12 @@
             const opt = sgpSelect.options[sgpSelect.selectedIndex];
             labelInput.value = opt ? opt.textContent : '';
             updateFavButton();
-            loadView();
+            // If user was on Events or Search tab, switch back to Player List
+            if (currentView === 'events' || currentView === 'search') {
+                setView('players');
+            } else {
+                loadView();
+            }
         }
 
         /* ---------------- View switching ---------------- */
@@ -1073,6 +1035,19 @@
 
             quickRounds.classList.toggle('hidden', view !== 'pairings');
 
+            // Events tab: load the SGP federation page
+            if (view === 'events') {
+                loadEventsPage();
+                return;
+            }
+
+            // Search tab: load the player search page
+            if (view === 'search') {
+                loadSearchPage();
+                return;
+            }
+
+            // Other tabs: if we have a tournament ID, load it
             if (tournamentInput.value.trim()) {
                 loadView();
             }
@@ -1089,6 +1064,42 @@
                 const btnRound = parseInt(btn.textContent.replace('R', ''), 10);
                 btn.classList.toggle('active', btnRound === round);
             });
+        }
+
+        /* ---------------- Events page loader ---------------- */
+        function loadEventsPage() {
+            statusEl.textContent = 'Loading SGP tournament list...';
+            statusEl.className = 'status';
+
+            placeholder.style.display = 'none';
+            iframeScaler.style.display = 'block';
+            frame.src = SGP_EVENTS_URL;
+
+            applyZoom();
+
+            frame.onload = function () {
+                statusEl.textContent = 'Loaded SGP tournament list.';
+                statusEl.className = 'status success';
+                applyZoom();
+            };
+        }
+
+        /* ---------------- Player search loader ---------------- */
+        function loadSearchPage() {
+            statusEl.textContent = 'Loading player search...';
+            statusEl.className = 'status';
+
+            placeholder.style.display = 'none';
+            iframeScaler.style.display = 'block';
+            frame.src = PLAYER_SEARCH_URL;
+
+            applyZoom();
+
+            frame.onload = function () {
+                statusEl.textContent = 'Loaded player search.';
+                statusEl.className = 'status success';
+                applyZoom();
+            };
         }
 
         /* ---------------- Main loader ---------------- */
@@ -1126,7 +1137,6 @@
             iframeScaler.style.display = 'block';
             frame.src = url;
 
-            // Reapply zoom on the new content
             applyZoom();
 
             frame.onload = function () {
