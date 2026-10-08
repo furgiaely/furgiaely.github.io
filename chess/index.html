@@ -41,6 +41,7 @@
             padding: 20px;
             line-height: 1.5;
             padding-bottom: env(safe-area-inset-bottom);
+            overflow-x: hidden;
         }
 
         .container {
@@ -317,7 +318,7 @@
             border-radius: 0 0 10px 10px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             overflow: auto;
-            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x pan-y;
             position: relative;
             min-height: 600px;
         }
@@ -474,12 +475,13 @@
                 min-height: auto;
             }
 
+            /* Fixed pixel height — avoids dvh recalculation issues in mobile Chrome */
             iframe {
-                height: 70dvh;
+                height: 500px;
             }
 
             .placeholder {
-                height: 40dvh;
+                height: 300px;
                 font-size: 0.9rem;
             }
         }
@@ -523,7 +525,7 @@
             }
 
             iframe {
-                height: 60dvh;
+                height: 400px;
             }
         }
     </style>
@@ -570,7 +572,7 @@
 -->
                 <select id="sgpTournamentSelect" class="tournament-select" onchange="onSgpSelect(this.value)">
                     <option value="">— Select a tournament —</option>
-<option value="1503733" data-type="individual">Go Checkmate U13 Rapid</option>
+                    <option value="1503733" data-type="individual">Go Checkmate U13 Rapid</option>
                     <option value="1508846" data-type="individual">NAG 2026</option>
                     <option value="1489169" data-type="team">NST 2026</option>
                 </select>
@@ -684,6 +686,9 @@
         /* Desktop viewport width to simulate inside the iframe */
         const DESKTOP_WIDTH = 1100;
 
+        /* Base iframe height (matches CSS on desktop) */
+        const BASE_IFRAME_HEIGHT = 750;
+
         /* SGP tournament list URL (Chess-Results federation page) */
         const SGP_EVENTS_URL = 'https://chess-results.com/fed.aspx?lan=1&fed=SGP';
 
@@ -747,17 +752,17 @@
             const isMobile = window.matchMedia('(max-width: 600px)').matches;
 
             if (isMobile) {
+                // Force the iframe to render at a desktop width, then scale down.
                 iframeScaler.style.width = DESKTOP_WIDTH + 'px';
                 iframeScaler.style.transform = 'scale(' + zoom + ')';
-
-                const frameHeight = frame.offsetHeight || 750;
-                iframeScaler.style.height = (frameHeight * zoom) + 'px';
-                frame.style.height = (frameHeight / zoom) + 'px';
+                // Set a fixed scaler height based on the base iframe height.
+                // Do NOT read frame.offsetHeight (feedback loop).
+                iframeScaler.style.height = (BASE_IFRAME_HEIGHT * zoom) + 'px';
+                // Do NOT touch frame.style.height — CSS controls it.
             } else {
                 iframeScaler.style.width = '';
                 iframeScaler.style.transform = '';
                 iframeScaler.style.height = '';
-                frame.style.height = '';
             }
 
             zoomLevelEl.textContent = Math.round(zoom * 100) + '%';
