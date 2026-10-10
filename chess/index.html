@@ -16,16 +16,31 @@
         :root {
             --primary: #3498db;
             --primary-dark: #2980b9;
+            --primary-soft: #eaf4fc;
+
             --accent: #f39c12;
             --accent-dark: #e67e22;
+            --accent-soft: #fdf3e3;
+
+            --saved: #e67e22;
+            --saved-soft: #fdf3e3;
+
+            --recent: #16a085;
+            --recent-soft: #e8f7f3;
+
+            --explore: #9b59b6;
+            --explore-dark: #8e44ad;
+            --explore-soft: #f4ecf9;
+
+            --panel-header: #34495e;
+            --panel-header-text: #ffffff;
+
             --text: #2c3e50;
             --text-muted: #7f8c8d;
             --text-light: #95a5a6;
             --bg: #f4f6f9;
             --card: #ffffff;
             --border: #dcdde1;
-            --chip-bg: #ecf0f1;
-            --chip-hover: #d5dbdb;
             --success: #27ae60;
             --danger: #e74c3c;
         }
@@ -75,6 +90,7 @@
             gap: 15px;
             align-items: flex-end;
             margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
         }
 
         .field {
@@ -115,11 +131,12 @@
             width: 260px;
         }
 
-        .field input.label-input {
+        .field input.label-input,
+        .field input.snr-input {
             width: 200px;
         }
 
-        button {
+        .btn-primary {
             padding: 10px 22px;
             background: var(--primary);
             color: #fff;
@@ -132,24 +149,37 @@
             height: 42px;
         }
 
-        button:hover {
+        .btn-primary:hover {
             background: var(--primary-dark);
         }
 
-        button:active {
+        .btn-primary:active {
             transform: translateY(1px);
         }
 
-        .btn-fav {
-            background: var(--accent);
-            padding: 10px 18px;
+        .btn-primary:disabled {
+            background: #b2bec3;
+            cursor: not-allowed;
         }
 
-        .btn-fav:hover {
+        .btn-save {
+            padding: 10px 18px;
+            background: var(--saved);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            height: 42px;
+        }
+
+        .btn-save:hover {
             background: var(--accent-dark);
         }
 
-        .btn-fav.active {
+        .btn-save.active {
             background: var(--accent-dark);
         }
 
@@ -187,25 +217,43 @@
             align-items: center;
             gap: 6px;
             padding: 5px 12px;
-            background: var(--chip-bg);
             border-radius: 16px;
             font-size: 0.85rem;
             cursor: pointer;
             border: none;
-            color: var(--text);
-            transition: background 0.2s;
             height: auto;
             font-weight: 500;
+            transition: background 0.2s, color 0.2s;
         }
 
-        .chip:hover {
-            background: var(--chip-hover);
+        .chip.chip-saved {
+            background: var(--saved-soft);
+            color: #a35a1a;
+        }
+
+        .chip.chip-saved:hover {
+            background: #f7e3c6;
+        }
+
+        .chip.chip-recent {
+            background: var(--recent-soft);
+            color: #0e6d5a;
+        }
+
+        .chip.chip-recent:hover {
+            background: #d5efe8;
+        }
+
+        .chip .chip-sub {
+            font-size: 0.75rem;
+            opacity: 0.75;
+            margin-left: 2px;
         }
 
         .chip .chip-remove {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--danger);
-            margin-left: 2px;
+            margin-left: 4px;
             cursor: pointer;
             line-height: 1;
         }
@@ -220,32 +268,117 @@
             font-style: italic;
         }
 
+        .tab-groups {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .tab-group {
+            background: var(--card);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            padding: 12px 16px;
+        }
+
+        .tab-group.tournament-group {
+            border-left: 4px solid var(--primary);
+        }
+
+        .tab-group.explore-group {
+            border-left: 4px solid var(--explore);
+        }
+
+        .tab-group-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .tab-group-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+        }
+
+        .tab-group.tournament-group .tab-group-title {
+            color: var(--primary-dark);
+        }
+
+        .tab-group.explore-group .tab-group-title {
+            color: var(--explore-dark);
+        }
+
+        .tab-group-hint {
+            font-size: 0.72rem;
+            color: var(--text-light);
+            font-weight: 500;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
         .view-tabs {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
-            margin-bottom: 15px;
         }
 
-        .view-tabs button {
+        .tab-group.tournament-group .view-tabs button {
             padding: 8px 18px;
             font-size: 0.9rem;
-            background: var(--chip-bg);
-            color: var(--text);
+            background: transparent;
+            color: var(--primary-dark);
+            border: 1.5px solid var(--primary);
             height: auto;
             border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
         }
 
-        .view-tabs button:hover {
-            background: var(--chip-hover);
+        .tab-group.tournament-group .view-tabs button:hover {
+            background: var(--primary-soft);
         }
 
-        .view-tabs button.active {
+        .tab-group.tournament-group .view-tabs button.active {
             background: var(--primary);
             color: #fff;
         }
 
-        /* ---------- Viewer toolbar (zoom only) ---------- */
+        .tab-group.explore-group .view-tabs button {
+            padding: 8px 18px;
+            font-size: 0.9rem;
+            background: transparent;
+            color: var(--explore-dark);
+            border: 1.5px solid var(--explore);
+            height: auto;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .tab-group.explore-group .view-tabs button:hover {
+            background: var(--explore-soft);
+        }
+
+        .tab-group.explore-group .view-tabs button.active {
+            background: var(--explore);
+            color: #fff;
+        }
+
+        .snr-field {
+            display: none;
+        }
+
+        .snr-field.visible {
+            display: flex;
+        }
+
         .viewer-toolbar {
             display: flex;
             align-items: center;
@@ -276,14 +409,14 @@
         .zoom-controls {
             display: inline-flex;
             align-items: center;
-            background: var(--chip-bg);
+            background: #eef1f4;
             border-radius: 20px;
             overflow: hidden;
         }
 
         .zoom-controls button {
             background: transparent;
-            color: var(--text);
+            color: #4b5c6b;
             border: none;
             width: 36px;
             height: 36px;
@@ -292,10 +425,11 @@
             padding: 0;
             border-radius: 0;
             cursor: pointer;
+            transition: background 0.2s;
         }
 
         .zoom-controls button:hover {
-            background: var(--chip-hover);
+            background: #dfe4e8;
         }
 
         .zoom-controls button:disabled {
@@ -306,13 +440,12 @@
         .zoom-controls .zoom-level {
             font-size: 0.8rem;
             font-weight: 700;
-            color: var(--text);
+            color: #4b5c6b;
             min-width: 46px;
             text-align: center;
             padding: 0 4px;
         }
 
-        /* ---------- Frame wrapper with horizontal scroll ---------- */
         .frame-wrapper {
             background: var(--card);
             border-radius: 0 0 10px 10px;
@@ -365,7 +498,6 @@
             display: none !important;
         }
 
-        /* ---------- FIDE Player panel ---------- */
         .fide-panel {
             background: var(--card);
             border-radius: 0 0 10px 10px;
@@ -409,15 +541,10 @@
             border-color: var(--primary);
         }
 
-        .fide-search-card button {
+        .fide-search-card .btn-primary {
             width: 100%;
             height: 48px;
             font-size: 1rem;
-        }
-
-        .fide-search-card button:disabled {
-            background: #b2bec3;
-            cursor: not-allowed;
         }
 
         .fide-status {
@@ -449,8 +576,8 @@
 
         .fide-result-header {
             padding: 16px;
-            background: var(--primary);
-            color: #fff;
+            background: var(--panel-header);
+            color: var(--panel-header-text);
         }
 
         .fide-result-header h2 {
@@ -493,14 +620,12 @@
             word-break: break-word;
         }
 
-        /* ---------- Tablet ---------- */
         @media (max-width: 900px) {
             .field select.tournament-select {
                 width: 220px;
             }
         }
 
-        /* ---------- Mobile ---------- */
         @media (max-width: 600px) {
             body {
                 padding: 12px;
@@ -534,28 +659,42 @@
             .field input,
             .field select,
             .field select.tournament-select,
-            .field input.label-input {
+            .field input.label-input,
+            .field input.snr-input {
                 width: 100%;
                 font-size: 16px;
                 min-height: 44px;
             }
 
-            .controls button {
+            .controls .btn-primary,
+            .controls .btn-save {
                 width: 100%;
                 height: 48px;
                 font-size: 1rem;
             }
 
-            /* View tabs: 2-column grid for 6 tabs */
-            .view-tabs {
+            .tab-groups {
+                gap: 8px;
+            }
+
+            .tab-group {
+                padding: 10px 12px;
+            }
+
+            .tab-group-hint {
+                display: none;
+            }
+
+            .tab-group .view-tabs {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 6px;
             }
 
-            .view-tabs button {
+            .tab-group.tournament-group .view-tabs button,
+            .tab-group.explore-group .view-tabs button {
                 padding: 10px 6px;
-                font-size: 0.8rem;
+                font-size: 0.78rem;
                 text-align: center;
                 min-height: 44px;
             }
@@ -612,7 +751,6 @@
                 padding: 15px;
             }
 
-            /* Narrow screens: stack key over value */
             .fide-attr-row {
                 flex-direction: column;
                 align-items: flex-start;
@@ -624,7 +762,6 @@
             }
         }
 
-        /* ---------- Landscape phones ---------- */
         @media (orientation: landscape) and (max-height: 500px) {
             body {
                 padding: 8px;
@@ -647,15 +784,16 @@
                 gap: 8px;
             }
 
-            .controls button {
+            .controls .btn-primary,
+            .controls .btn-save {
                 height: 40px;
                 font-size: 0.9rem;
             }
 
-            .view-tabs button {
+            .tab-group .view-tabs button {
                 min-height: 36px;
                 padding: 6px 8px;
-                font-size: 0.75rem;
+                font-size: 0.72rem;
             }
 
             .viewer-toolbar {
@@ -683,9 +821,9 @@
 
         <div class="quick-access">
             <div class="quick-access-row">
-                <span class="quick-access-label">⭐ Favourites</span>
-                <div id="favouritesList">
-                    <span class="chip-empty">No favourites yet</span>
+                <span class="quick-access-label">⭐ Saved</span>
+                <div id="savedList">
+                    <span class="chip-empty">No saved items yet</span>
                 </div>
             </div>
             <div class="quick-access-row">
@@ -703,9 +841,10 @@
   SGP tournament list (manually maintained)
   Format: <option value="CHESS_RESULTS_ID" data-type="individual|team">Display Name</option>
   Art values used by this viewer:
-    Player List  -> individual: art=3   | team: art=15
-    Rankings     -> individual: art=1   | team: art=16
-    Pairings     -> both: art=2 (current round)
+    Player List     -> individual: art=3   | team: art=15
+    Starting Rank   -> individual: art=1   | team: art=16
+    Pairings        -> both: art=2 (current round)
+    Player Info     -> both: art=9&snr=N   (N = Starting Number)
   Add new tournaments at the top so they appear first.
 -->
                 <select id="sgpTournamentSelect" class="tournament-select" onchange="onSgpSelect(this.value)">
@@ -726,8 +865,19 @@
                 >
             </div>
 
+            <div class="field snr-field" id="snrField">
+                <label for="snrInput">Starting Number (SNR)</label>
+                <input
+                    type="text"
+                    id="snrInput"
+                    class="snr-input"
+                    placeholder="e.g., 1"
+                    inputmode="numeric"
+                >
+            </div>
+
             <div class="field">
-                <label for="labelInput">Label (for favourite)</label>
+                <label for="labelInput">Label (for save)</label>
                 <input
                     type="text"
                     id="labelInput"
@@ -737,32 +887,53 @@
                 >
             </div>
 
-            <button onclick="loadView()">Load</button>
-            <button id="favBtn" class="btn-fav" onclick="toggleFavourite()">☆ Favourite</button>
+            <button class="btn-primary" onclick="loadView()">Load</button>
+            <button id="saveBtn" class="btn-save" onclick="saveCurrent()">☆ Save</button>
         </div>
 
-        <div class="view-tabs" id="viewTabs">
-            <button data-view="players" class="active" onclick="setView('players')">
-                👥 Player List
-            </button>
-            <button data-view="rankings" onclick="setView('rankings')">
-                🏆 Starting Rank
-            </button>
-            <button data-view="pairings" onclick="setView('pairings')">
-                ⚔ Pairings
-            </button>
-            <button data-view="events" onclick="setView('events')">
-                📅 Tournaments
-            </button>
-            <button data-view="search" onclick="setView('search')">
-                🔍 Search FIDE Player
-            </button>
-            <button data-view="fide" onclick="setView('fide')">
-                🪪 NAG Player Search
-            </button>
+        <div class="tab-groups">
+
+            <div class="tab-group tournament-group">
+                <div class="tab-group-header">
+                    <span class="tab-group-title">🏁 Tournament Views</span>
+                    <span class="tab-group-hint">uses the tournament ID above</span>
+                </div>
+                <div class="view-tabs" id="tournamentTabs">
+                    <button data-view="players" class="active" onclick="setView('players')">
+                        👥 Player List
+                    </button>
+                    <button data-view="rankings" onclick="setView('rankings')">
+                        🏆 Starting Rank
+                    </button>
+                    <button data-view="pairings" onclick="setView('pairings')">
+                        ⚔ Pairings
+                    </button>
+                    <button data-view="playerinfo" onclick="setView('playerinfo')">
+                        🪪 Player Info
+                    </button>
+                </div>
+            </div>
+
+            <div class="tab-group explore-group">
+                <div class="tab-group-header">
+                    <span class="tab-group-title">🧭 Explore</span>
+                    <span class="tab-group-hint">no tournament ID needed</span>
+                </div>
+                <div class="view-tabs" id="exploreTabs">
+                    <button data-view="events" onclick="setView('events')">
+                        📅 Tournaments
+                    </button>
+                    <button data-view="search" onclick="setView('search')">
+                        🔍 Search FIDE Player
+                    </button>
+                    <button data-view="fide" onclick="setView('fide')">
+                        🪪 NAG Player Search
+                    </button>
+                </div>
+            </div>
+
         </div>
 
-        <!-- Viewer toolbar: zoom only -->
         <div class="viewer-toolbar">
             <span class="viewer-toolbar-label">Viewer</span>
             <div class="viewer-toolbar-actions">
@@ -795,7 +966,6 @@
                 ></iframe>
             </div>
 
-            <!-- FIDE Player panel (no iframe) -->
             <div class="fide-panel" id="fidePanel">
                 <div class="fide-search-card">
                     <div class="field">
@@ -808,7 +978,7 @@
                             value="5836352"
                         >
                     </div>
-                    <button id="fideSearchBtn" onclick="searchFidePlayer()">Search</button>
+                    <button id="fideSearchBtn" class="btn-primary" onclick="searchFidePlayer()">Search</button>
                 </div>
 
                 <div class="fide-status" id="fideStatus"></div>
@@ -833,16 +1003,17 @@
         const placeholder = document.getElementById('placeholder');
         const statusEl = document.getElementById('status');
         const tournamentInput = document.getElementById('tournamentId');
+        const snrInput = document.getElementById('snrInput');
+        const snrField = document.getElementById('snrField');
         const labelInput = document.getElementById('labelInput');
         const sgpSelect = document.getElementById('sgpTournamentSelect');
-        const favBtn = document.getElementById('favBtn');
-        const favouritesList = document.getElementById('favouritesList');
+        const saveBtn = document.getElementById('saveBtn');
+        const savedList = document.getElementById('savedList');
         const recentList = document.getElementById('recentList');
         const zoomLevelEl = document.getElementById('zoomLevel');
         const zoomInBtn = document.getElementById('zoomInBtn');
         const zoomOutBtn = document.getElementById('zoomOutBtn');
 
-        /* FIDE panel refs */
         const fidePanel = document.getElementById('fidePanel');
         const fideIdInput = document.getElementById('fideIdInput');
         const fideSearchBtn = document.getElementById('fideSearchBtn');
@@ -868,21 +1039,28 @@
         const FIDE_API_URL = 'https://script.google.com/macros/s/AKfycbzyFyOgsHgOHlfDbwgmL2yK_ptasBHj9l1YK4SFQUCJ4ImOK9M2vXXzKKBJx_ohucCT/exec';
 
         /* ---------------- localStorage keys ---------------- */
-        const FAV_KEY = 'chessViewer.favourites';
+        const SAVED_KEY = 'chessViewer.saved';
+        const LEGACY_FAV_KEY = 'chessViewer.favourites';
         const RECENT_KEY = 'chessViewer.recent';
         const RECENT_LIMIT = 6;
 
         /* ---------------- Storage helpers ---------------- */
-        function getFavourites() {
+        function getSaved() {
             try {
-                return JSON.parse(localStorage.getItem(FAV_KEY)) || [];
+                const raw = localStorage.getItem(SAVED_KEY);
+                if (raw) return JSON.parse(raw) || [];
+                // Migrate from old favourites list (assume they're all tournaments)
+                const legacy = JSON.parse(localStorage.getItem(LEGACY_FAV_KEY)) || [];
+                return legacy.map(function (f) {
+                    return { type: 'tournament', id: f.id, label: f.label };
+                });
             } catch (e) {
                 return [];
             }
         }
 
-        function saveFavourites(list) {
-            localStorage.setItem(FAV_KEY, JSON.stringify(list));
+        function saveSaved(list) {
+            localStorage.setItem(SAVED_KEY, JSON.stringify(list));
         }
 
         function getRecent() {
@@ -963,60 +1141,103 @@
             return 'Tournament ' + id;
         }
 
-        /* ---------------- Favourites logic ---------------- */
-        function isFavourite(id) {
-            return getFavourites().some(function (f) { return f.id === id; });
+        /* ---------------- Saved items: tournaments and players ---------------- */
+        function savedKey(item) {
+            if (item.type === 'player') return 'p:' + item.id + ':' + item.snr;
+            return 't:' + item.id;
         }
 
-        function toggleFavourite() {
-            const id = tournamentInput.value.trim();
-            if (!id || !/^\d+$/.test(id)) {
-                statusEl.textContent = 'Enter or load a valid tournament ID first.';
-                statusEl.className = 'status error';
+        function isSaved(item) {
+            const key = savedKey(item);
+            return getSaved().some(function (s) { return savedKey(s) === key; });
+        }
+
+        // Save/unsave the current view
+function saveCurrent() {
+    const id = tournamentInput.value.trim();
+    if (!id || !/^\d+$/.test(id)) {
+        statusEl.textContent = 'Enter or load a valid tournament ID first.';
+        statusEl.className = 'status error';
+        return;
+    }
+
+    // Determine what we're saving
+    let item;
+    if (currentView === 'playerinfo') {
+        const snr = snrInput.value.trim();
+        if (!snr || !/^\d+$/.test(snr)) {
+            statusEl.textContent = 'Enter a valid Starting Number (SNR) before saving.';
+            statusEl.className = 'status error';
+            return;
+        }
+
+        // Label logic:
+        //   - If the user typed a custom label -> use it as-is (no SNR suffix)
+        //   - Otherwise -> use the tournament name + " · SNR N"
+        const customLabel = labelInput.value.trim();
+        let playerLabel;
+        if (customLabel) {
+            playerLabel = customLabel;
+        } else {
+            const baseLabel = getKnownLabel(id) || ('Tournament ' + id);
+            playerLabel = baseLabel + ' · SNR ' + snr;
+        }
+
+        item = { type: 'player', id: id, snr: snr, label: playerLabel };
+    } else {
+        item = { type: 'tournament', id: id, label: resolveLabel(id) };
+    }
+
+    let saved = getSaved();
+    const key = savedKey(item);
+
+    if (saved.some(function (s) { return savedKey(s) === key; })) {
+        saved = saved.filter(function (s) { return savedKey(s) !== key; });
+        statusEl.textContent = `Removed from saved.`;
+        statusEl.className = 'status';
+    } else {
+        saved.push(item);
+        statusEl.textContent = `Saved "${item.label}".`;
+        statusEl.className = 'status success';
+        labelInput.value = '';
+    }
+
+    saveSaved(saved);
+    renderSaved();
+    updateSaveButton();
+}        function renderSaved() {
+            const saved = getSaved();
+            savedList.innerHTML = '';
+
+            if (saved.length === 0) {
+                savedList.innerHTML = '<span class="chip-empty">No saved items yet</span>';
                 return;
             }
 
-            let favs = getFavourites();
-
-            if (isFavourite(id)) {
-                favs = favs.filter(function (f) { return f.id !== id; });
-                statusEl.textContent = `Removed tournament ${id} from favourites.`;
-                statusEl.className = 'status';
-            } else {
-                const label = resolveLabel(id);
-                favs.push({ id: id, label: label });
-                statusEl.textContent = `Added "${label}" to favourites.`;
-                statusEl.className = 'status success';
-                labelInput.value = '';
-            }
-
-            saveFavourites(favs);
-            renderFavourites();
-            updateFavButton();
-        }
-
-        function renderFavourites() {
-            const favs = getFavourites();
-            favouritesList.innerHTML = '';
-
-            if (favs.length === 0) {
-                favouritesList.innerHTML = '<span class="chip-empty">No favourites yet</span>';
-                return;
-            }
-
-            favs.forEach(function (fav) {
-                favouritesList.appendChild(makeChip(fav.id, fav.label, true));
+            saved.forEach(function (item) {
+                savedList.appendChild(makeChip(item, true));
             });
         }
 
-        function updateFavButton() {
+        function updateSaveButton() {
             const id = tournamentInput.value.trim();
-            if (id && isFavourite(id)) {
-                favBtn.textContent = '★ Favourited';
-                favBtn.classList.add('active');
+            let item = null;
+
+            if (id && currentView === 'playerinfo') {
+                const snr = snrInput.value.trim();
+                if (snr && /^\d+$/.test(snr)) {
+                    item = { type: 'player', id: id, snr: snr };
+                }
+            } else if (id) {
+                item = { type: 'tournament', id: id };
+            }
+
+            if (item && isSaved(item)) {
+                saveBtn.textContent = '★ Saved';
+                saveBtn.classList.add('active');
             } else {
-                favBtn.textContent = '☆ Favourite';
-                favBtn.classList.remove('active');
+                saveBtn.textContent = '☆ Save';
+                saveBtn.classList.remove('active');
             }
         }
 
@@ -1049,42 +1270,67 @@
             }
 
             recent.forEach(function (item) {
-                recentList.appendChild(makeChip(item.id, item.label, false));
+                recentList.appendChild(makeChip({ type: 'tournament', id: item.id, label: item.label }, false));
             });
         }
 
         /* ---------------- Chip builder ---------------- */
-        function makeChip(id, label, isFav) {
+        function makeChip(item, isSavedChip) {
             const chip = document.createElement('button');
-            chip.className = 'chip';
-            chip.title = `Load tournament ${id}`;
-            chip.innerHTML = `<span>${escapeHtml(label)}</span>`;
+            chip.className = 'chip ' + (isSavedChip ? 'chip-saved' : 'chip-recent');
+            chip.title = item.type === 'player'
+                ? `Open player (SNR ${item.snr}) in tournament ${item.id}`
+                : `Load tournament ${item.id}`;
 
-            if (isFav) {
+            const labelSpan = document.createElement('span');
+            labelSpan.textContent = item.label;
+            chip.appendChild(labelSpan);
+
+            if (item.type === 'player') {
+                const sub = document.createElement('span');
+                sub.className = 'chip-sub';
+                sub.textContent = '🪪';
+                chip.appendChild(sub);
+            }
+
+            if (isSavedChip) {
                 const remove = document.createElement('span');
                 remove.className = 'chip-remove';
                 remove.textContent = '×';
-                remove.title = 'Remove from favourites';
+                remove.title = 'Remove from saved';
                 remove.addEventListener('click', function (e) {
                     e.stopPropagation();
-                    const favs = getFavourites().filter(function (f) { return f.id !== id; });
-                    saveFavourites(favs);
-                    renderFavourites();
-                    updateFavButton();
+                    const key = savedKey(item);
+                    const updated = getSaved().filter(function (s) {
+                        return savedKey(s) !== key;
+                    });
+                    saveSaved(updated);
+                    renderSaved();
+                    updateSaveButton();
                 });
                 chip.appendChild(remove);
             }
 
             chip.addEventListener('click', function () {
-                tournamentInput.value = id;
-                sgpSelect.value = getKnownLabel(id) ? id : '';
-                labelInput.value = label.startsWith('Tournament ') ? '' : label;
-                updateFavButton();
-                if (currentView === 'fide') {
-                    setView('players');
+                tournamentInput.value = item.id;
+                sgpSelect.value = getKnownLabel(item.id) ? item.id : '';
+
+                if (item.type === 'player') {
+                    // Pre-fill SNR and switch to Player Info tab
+                    snrInput.value = item.snr;
+                    labelInput.value = '';
+                    setView('playerinfo');
                 } else {
-                    loadView();
+                    // Tournament: restore label and load Player List
+                    labelInput.value = item.label.startsWith('Tournament ') ? '' : item.label;
+                    if (currentView === 'fide' || currentView === 'search' || currentView === 'events') {
+                        setView('players');
+                    } else {
+                        loadView();
+                    }
                 }
+
+                updateSaveButton();
             });
 
             return chip;
@@ -1103,9 +1349,17 @@
             }
         });
 
+        snrInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                loadView();
+            }
+        });
+
+        snrInput.addEventListener('input', updateSaveButton);
+
         labelInput.addEventListener('keydown', function (e) {
             if (e.key === 'Enter') {
-                toggleFavourite();
+                saveCurrent();
             }
         });
 
@@ -1113,7 +1367,7 @@
             if (sgpSelect.value && sgpSelect.value !== tournamentInput.value.trim()) {
                 sgpSelect.value = '';
             }
-            updateFavButton();
+            updateSaveButton();
         });
 
         fideIdInput.addEventListener('keydown', function (e) {
@@ -1128,8 +1382,7 @@
             tournamentInput.value = value;
             const opt = sgpSelect.options[sgpSelect.selectedIndex];
             labelInput.value = opt ? opt.textContent : '';
-            updateFavButton();
-            // If user was on Events/Search/FIDE tab, switch back to Player List
+            updateSaveButton();
             if (currentView === 'events' || currentView === 'search' || currentView === 'fide') {
                 setView('players');
             } else {
@@ -1141,39 +1394,43 @@
         function setView(view) {
             currentView = view;
 
-            document.querySelectorAll('#viewTabs button').forEach(function (btn) {
+            document.querySelectorAll('.view-tabs button').forEach(function (btn) {
                 btn.classList.toggle('active', btn.dataset.view === view);
             });
 
-            // FIDE Player tab: show the FIDE panel, hide the iframe
+            snrField.classList.toggle('visible', view === 'playerinfo');
+
             if (view === 'fide') {
                 placeholder.style.display = 'none';
                 iframeScaler.style.display = 'none';
                 fidePanel.classList.add('visible');
                 statusEl.textContent = '';
                 statusEl.className = 'status';
-                // Auto-run a search on first view
                 if (!fideResult.classList.contains('visible')) {
                     searchFidePlayer();
                 }
+                updateSaveButton();
                 return;
             }
 
-            // Every other tab uses the iframe
             fidePanel.classList.remove('visible');
 
             if (view === 'events') {
                 loadEventsPage();
+                updateSaveButton();
                 return;
             }
 
             if (view === 'search') {
                 loadSearchPage();
+                updateSaveButton();
                 return;
             }
 
             if (tournamentInput.value.trim()) {
                 loadView();
+            } else {
+                updateSaveButton();
             }
         }
 
@@ -1240,6 +1497,15 @@
             } else if (currentView === 'pairings') {
                 url += '&art=2&rd=-1';
                 label = 'pairings (current round)';
+            } else if (currentView === 'playerinfo') {
+                const snr = snrInput.value.trim();
+                if (!snr || !/^\d+$/.test(snr)) {
+                    statusEl.textContent = 'Please enter a valid Starting Number (SNR) for Player Info.';
+                    statusEl.className = 'status error';
+                    return;
+                }
+                url += '&art=9&snr=' + encodeURIComponent(snr);
+                label = `player info (SNR ${snr})`;
             }
 
             statusEl.textContent = `Loading ${label} for tournament ${tnr}...`;
@@ -1259,7 +1525,7 @@
             };
 
             addToRecent(tnr);
-            updateFavButton();
+            updateSaveButton();
         }
 
         /* ---------------- FIDE Player lookup ---------------- */
@@ -1351,9 +1617,9 @@
         /* ---------------- Initial render ---------------- */
         loadZoom();
         applyZoom();
-        renderFavourites();
+        renderSaved();
         renderRecent();
-        updateFavButton();
+        updateSaveButton();
     </script>
 
 </body>
