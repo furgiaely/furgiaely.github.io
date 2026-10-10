@@ -365,6 +365,134 @@
             display: none !important;
         }
 
+        /* ---------- FIDE Player panel ---------- */
+        .fide-panel {
+            background: var(--card);
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            padding: 20px;
+            display: none;
+        }
+
+        .fide-panel.visible {
+            display: block;
+        }
+
+        .fide-search-card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .fide-search-card .field label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #576574;
+            margin-bottom: 5px;
+        }
+
+        .fide-search-card input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 16px;
+            min-height: 44px;
+        }
+
+        .fide-search-card input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .fide-search-card button {
+            width: 100%;
+            height: 48px;
+            font-size: 1rem;
+        }
+
+        .fide-search-card button:disabled {
+            background: #b2bec3;
+            cursor: not-allowed;
+        }
+
+        .fide-status {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+            min-height: 20px;
+            text-align: center;
+        }
+
+        .fide-status.error {
+            color: var(--danger);
+        }
+
+        .fide-status.success {
+            color: var(--success);
+        }
+
+        .fide-result {
+            border-radius: 10px;
+            overflow: hidden;
+            display: none;
+            border: 1px solid #f1f2f6;
+        }
+
+        .fide-result.visible {
+            display: block;
+        }
+
+        .fide-result-header {
+            padding: 16px;
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .fide-result-header h2 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            line-height: 1.3;
+            word-break: break-word;
+        }
+
+        .fide-attr-list {
+            padding: 4px 16px 12px;
+        }
+
+        .fide-attr-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f2f6;
+        }
+
+        .fide-attr-row:last-child {
+            border-bottom: none;
+        }
+
+        .fide-attr-key {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            flex-shrink: 0;
+        }
+
+        .fide-attr-value {
+            font-size: 1rem;
+            color: var(--text);
+            text-align: right;
+            word-break: break-word;
+        }
+
         /* ---------- Tablet ---------- */
         @media (max-width: 900px) {
             .field select.tournament-select {
@@ -418,15 +546,11 @@
                 font-size: 1rem;
             }
 
-            /* View tabs: 2-column grid for 5 tabs */
+            /* View tabs: 2-column grid for 6 tabs */
             .view-tabs {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 6px;
-            }
-
-            .view-tabs button:last-child:nth-child(odd) {
-                grid-column: 1 / -1;
             }
 
             .view-tabs button {
@@ -475,7 +599,6 @@
                 min-height: auto;
             }
 
-            /* Fixed pixel height — avoids dvh recalculation issues in mobile Chrome */
             iframe {
                 height: 500px;
             }
@@ -483,6 +606,21 @@
             .placeholder {
                 height: 300px;
                 font-size: 0.9rem;
+            }
+
+            .fide-panel {
+                padding: 15px;
+            }
+
+            /* Narrow screens: stack key over value */
+            .fide-attr-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2px;
+            }
+
+            .fide-attr-value {
+                text-align: left;
             }
         }
 
@@ -617,7 +755,10 @@
                 📅 Tournaments
             </button>
             <button data-view="search" onclick="setView('search')">
-                🔍 Search Player
+                🔍 Search FIDE Player
+            </button>
+            <button data-view="fide" onclick="setView('fide')">
+                🪪 NAG Player Search
             </button>
         </div>
 
@@ -653,6 +794,32 @@
                     title="Chess Tournament Data"
                 ></iframe>
             </div>
+
+            <!-- FIDE Player panel (no iframe) -->
+            <div class="fide-panel" id="fidePanel">
+                <div class="fide-search-card">
+                    <div class="field">
+                        <label for="fideIdInput">FIDE ID</label>
+                        <input
+                            type="text"
+                            id="fideIdInput"
+                            placeholder="e.g., 1503014"
+                            inputmode="numeric"
+                            value="5836352"
+                        >
+                    </div>
+                    <button id="fideSearchBtn" onclick="searchFidePlayer()">Search</button>
+                </div>
+
+                <div class="fide-status" id="fideStatus"></div>
+
+                <div class="fide-result" id="fideResult">
+                    <div class="fide-result-header">
+                        <h2 id="fideResultTitle">Player Found</h2>
+                    </div>
+                    <div class="fide-attr-list" id="fideAttrList"></div>
+                </div>
+            </div>
         </div>
 
         <div class="status" id="status"></div>
@@ -675,6 +842,15 @@
         const zoomInBtn = document.getElementById('zoomInBtn');
         const zoomOutBtn = document.getElementById('zoomOutBtn');
 
+        /* FIDE panel refs */
+        const fidePanel = document.getElementById('fidePanel');
+        const fideIdInput = document.getElementById('fideIdInput');
+        const fideSearchBtn = document.getElementById('fideSearchBtn');
+        const fideStatus = document.getElementById('fideStatus');
+        const fideResult = document.getElementById('fideResult');
+        const fideResultTitle = document.getElementById('fideResultTitle');
+        const fideAttrList = document.getElementById('fideAttrList');
+
         let currentView = 'players';
 
         /* ---------------- Zoom state ---------------- */
@@ -683,17 +859,13 @@
         const ZOOM_KEY = 'chessViewer.zoom';
         let zoom = 0.5;
 
-        /* Desktop viewport width to simulate inside the iframe */
         const DESKTOP_WIDTH = 1100;
-
-        /* Base iframe height (matches CSS on desktop) */
         const BASE_IFRAME_HEIGHT = 750;
 
-        /* SGP tournament list URL (Chess-Results federation page) */
+        /* Remote URLs */
         const SGP_EVENTS_URL = 'https://chess-results.com/fed.aspx?lan=1&fed=SGP';
-
-        /* Player search URL (Chess-Results player search page) */
         const PLAYER_SEARCH_URL = 'https://chess-results.com/SpielerSuche.aspx?lan=1';
+        const FIDE_API_URL = 'https://script.google.com/macros/s/AKfycbzyFyOgsHgOHlfDbwgmL2yK_ptasBHj9l1YK4SFQUCJ4ImOK9M2vXXzKKBJx_ohucCT/exec';
 
         /* ---------------- localStorage keys ---------------- */
         const FAV_KEY = 'chessViewer.favourites';
@@ -752,13 +924,9 @@
             const isMobile = window.matchMedia('(max-width: 600px)').matches;
 
             if (isMobile) {
-                // Force the iframe to render at a desktop width, then scale down.
                 iframeScaler.style.width = DESKTOP_WIDTH + 'px';
                 iframeScaler.style.transform = 'scale(' + zoom + ')';
-                // Set a fixed scaler height based on the base iframe height.
-                // Do NOT read frame.offsetHeight (feedback loop).
                 iframeScaler.style.height = (BASE_IFRAME_HEIGHT * zoom) + 'px';
-                // Do NOT touch frame.style.height — CSS controls it.
             } else {
                 iframeScaler.style.width = '';
                 iframeScaler.style.transform = '';
@@ -912,7 +1080,11 @@
                 sgpSelect.value = getKnownLabel(id) ? id : '';
                 labelInput.value = label.startsWith('Tournament ') ? '' : label;
                 updateFavButton();
-                loadView();
+                if (currentView === 'fide') {
+                    setView('players');
+                } else {
+                    loadView();
+                }
             });
 
             return chip;
@@ -944,6 +1116,12 @@
             updateFavButton();
         });
 
+        fideIdInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                searchFidePlayer();
+            }
+        });
+
         /* ---------------- SGP dropdown ---------------- */
         function onSgpSelect(value) {
             if (!value) return;
@@ -951,8 +1129,8 @@
             const opt = sgpSelect.options[sgpSelect.selectedIndex];
             labelInput.value = opt ? opt.textContent : '';
             updateFavButton();
-            // If user was on Events or Search tab, switch back to Player List
-            if (currentView === 'events' || currentView === 'search') {
+            // If user was on Events/Search/FIDE tab, switch back to Player List
+            if (currentView === 'events' || currentView === 'search' || currentView === 'fide') {
                 setView('players');
             } else {
                 loadView();
@@ -967,19 +1145,33 @@
                 btn.classList.toggle('active', btn.dataset.view === view);
             });
 
-            // Events tab: load the SGP federation page
+            // FIDE Player tab: show the FIDE panel, hide the iframe
+            if (view === 'fide') {
+                placeholder.style.display = 'none';
+                iframeScaler.style.display = 'none';
+                fidePanel.classList.add('visible');
+                statusEl.textContent = '';
+                statusEl.className = 'status';
+                // Auto-run a search on first view
+                if (!fideResult.classList.contains('visible')) {
+                    searchFidePlayer();
+                }
+                return;
+            }
+
+            // Every other tab uses the iframe
+            fidePanel.classList.remove('visible');
+
             if (view === 'events') {
                 loadEventsPage();
                 return;
             }
 
-            // Search tab: load the player search page
             if (view === 'search') {
                 loadSearchPage();
                 return;
             }
 
-            // Other tabs: if we have a tournament ID, load it
             if (tournamentInput.value.trim()) {
                 loadView();
             }
@@ -991,6 +1183,7 @@
             statusEl.className = 'status';
 
             placeholder.style.display = 'none';
+            fidePanel.classList.remove('visible');
             iframeScaler.style.display = 'block';
             frame.src = SGP_EVENTS_URL;
 
@@ -1009,6 +1202,7 @@
             statusEl.className = 'status';
 
             placeholder.style.display = 'none';
+            fidePanel.classList.remove('visible');
             iframeScaler.style.display = 'block';
             frame.src = PLAYER_SEARCH_URL;
 
@@ -1044,7 +1238,6 @@
                 url += isTeam ? '&art=16' : '&art=1';
                 label = isTeam ? 'team rankings' : 'rankings';
             } else if (currentView === 'pairings') {
-                // Current round only
                 url += '&art=2&rd=-1';
                 label = 'pairings (current round)';
             }
@@ -1053,6 +1246,7 @@
             statusEl.className = 'status';
 
             placeholder.style.display = 'none';
+            fidePanel.classList.remove('visible');
             iframeScaler.style.display = 'block';
             frame.src = url;
 
@@ -1066,6 +1260,89 @@
 
             addToRecent(tnr);
             updateFavButton();
+        }
+
+        /* ---------------- FIDE Player lookup ---------------- */
+        async function searchFidePlayer() {
+            const fideId = fideIdInput.value.trim();
+
+            if (!fideId || !/^\d{4,9}$/.test(fideId)) {
+                fideStatus.textContent = 'Please enter a valid FIDE ID (4–9 digits).';
+                fideStatus.className = 'fide-status error';
+                fideResult.classList.remove('visible');
+                return;
+            }
+
+            fideSearchBtn.disabled = true;
+            fideStatus.textContent = `Searching FIDE ID ${fideId}...`;
+            fideStatus.className = 'fide-status';
+            fideResult.classList.remove('visible');
+
+            try {
+                const url = `${FIDE_API_URL}?fideId=${encodeURIComponent(fideId)}`;
+                const response = await fetch(url, { method: 'GET', redirect: 'follow' });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.error) {
+                    fideStatus.textContent = data.error;
+                    fideStatus.className = 'fide-status error';
+                    return;
+                }
+
+                if (!data.player) {
+                    fideStatus.textContent = 'Player not found.';
+                    fideStatus.className = 'fide-status error';
+                    return;
+                }
+
+                renderFidePlayer(data.player);
+                fideStatus.textContent = 'Player found.';
+                fideStatus.className = 'fide-status success';
+
+            } catch (error) {
+                console.error('FIDE fetch error:', error);
+                fideStatus.textContent = 'Failed to load. Check your connection.';
+                fideStatus.className = 'fide-status error';
+            } finally {
+                fideSearchBtn.disabled = false;
+            }
+        }
+
+        function renderFidePlayer(player) {
+            const title = player.Name || player.NAME || player.name || ('FIDE ID ' + player.FIDE_ID);
+            fideResultTitle.textContent = title;
+            fideAttrList.innerHTML = '';
+
+            const titleKeys = ['Name', 'NAME', 'name'];
+
+            Object.keys(player).forEach(function (key) {
+                if (titleKeys.indexOf(key) !== -1) return;
+
+                const value = player[key];
+                if (value === '' || value === null || value === undefined) return;
+
+                const row = document.createElement('div');
+                row.className = 'fide-attr-row';
+
+                const keyEl = document.createElement('div');
+                keyEl.className = 'fide-attr-key';
+                keyEl.textContent = key.replace(/_/g, ' ');
+
+                const valueEl = document.createElement('div');
+                valueEl.className = 'fide-attr-value';
+                valueEl.textContent = value;
+
+                row.appendChild(keyEl);
+                row.appendChild(valueEl);
+                fideAttrList.appendChild(row);
+            });
+
+            fideResult.classList.add('visible');
         }
 
         /* ---------------- Viewport changes ---------------- */
