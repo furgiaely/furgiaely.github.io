@@ -842,9 +842,9 @@
   Format: <option value="CHESS_RESULTS_ID" data-type="individual|team">Display Name</option>
   Art values used by this viewer:
     Player List     -> individual: art=3   | team: art=15
-    Starting Rank   -> individual: art=1   | team: art=16
+    Starting Rank   -> individual: art=0   | team: art=16
     Pairings        -> both: art=2 (current round)
-    Player Info     -> both: art=9&snr=N   (N = Starting Number)
+    Player Info     -> both: art=9&snr=N   (N = Starting Rank)
   Add new tournaments at the top so they appear first.
 -->
                 <select id="sgpTournamentSelect" class="tournament-select" onchange="onSgpSelect(this.value)">
@@ -865,7 +865,7 @@
             </div>
 
             <div class="field snr-field" id="snrField">
-                <label for="snrInput">Starting Number (SNR)</label>
+                <label for="snrInput">Starting Rank (SNR)</label>
                 <input
                     type="text"
                     id="snrInput"
@@ -1152,59 +1152,61 @@
         }
 
         // Save/unsave the current view
-function saveCurrent() {
-    const id = tournamentInput.value.trim();
-    if (!id || !/^\d+$/.test(id)) {
-        statusEl.textContent = 'Enter or load a valid tournament ID first.';
-        statusEl.className = 'status error';
-        return;
-    }
+        function saveCurrent() {
+            const id = tournamentInput.value.trim();
+            if (!id || !/^\d+$/.test(id)) {
+                statusEl.textContent = 'Enter or load a valid tournament ID first.';
+                statusEl.className = 'status error';
+                return;
+            }
 
-    // Determine what we're saving
-    let item;
-    if (currentView === 'playerinfo') {
-        const snr = snrInput.value.trim();
-        if (!snr || !/^\d+$/.test(snr)) {
-            statusEl.textContent = 'Enter a valid Starting Number (SNR) before saving.';
-            statusEl.className = 'status error';
-            return;
+            // Determine what we're saving
+            let item;
+            if (currentView === 'playerinfo') {
+                const snr = snrInput.value.trim();
+                if (!snr || !/^\d+$/.test(snr)) {
+                    statusEl.textContent = 'Enter a valid Starting Rank (SNR) before saving.';
+                    statusEl.className = 'status error';
+                    return;
+                }
+
+                // Label logic:
+                //   - If the user typed a custom label -> use it as-is (no SNR suffix)
+                //   - Otherwise -> use the tournament name + " · SNR N"
+                const customLabel = labelInput.value.trim();
+                let playerLabel;
+                if (customLabel) {
+                    playerLabel = customLabel;
+                } else {
+                    const baseLabel = getKnownLabel(id) || ('Tournament ' + id);
+                    playerLabel = baseLabel + ' · SNR ' + snr;
+                }
+
+                item = { type: 'player', id: id, snr: snr, label: playerLabel };
+            } else {
+                item = { type: 'tournament', id: id, label: resolveLabel(id) };
+            }
+
+            let saved = getSaved();
+            const key = savedKey(item);
+
+            if (saved.some(function (s) { return savedKey(s) === key; })) {
+                saved = saved.filter(function (s) { return savedKey(s) !== key; });
+                statusEl.textContent = `Removed from saved.`;
+                statusEl.className = 'status';
+            } else {
+                saved.push(item);
+                statusEl.textContent = `Saved "${item.label}".`;
+                statusEl.className = 'status success';
+                labelInput.value = '';
+            }
+
+            saveSaved(saved);
+            renderSaved();
+            updateSaveButton();
         }
 
-        // Label logic:
-        //   - If the user typed a custom label -> use it as-is (no SNR suffix)
-        //   - Otherwise -> use the tournament name + " · SNR N"
-        const customLabel = labelInput.value.trim();
-        let playerLabel;
-        if (customLabel) {
-            playerLabel = customLabel;
-        } else {
-            const baseLabel = getKnownLabel(id) || ('Tournament ' + id);
-            playerLabel = baseLabel + ' · SNR ' + snr;
-        }
-
-        item = { type: 'player', id: id, snr: snr, label: playerLabel };
-    } else {
-        item = { type: 'tournament', id: id, label: resolveLabel(id) };
-    }
-
-    let saved = getSaved();
-    const key = savedKey(item);
-
-    if (saved.some(function (s) { return savedKey(s) === key; })) {
-        saved = saved.filter(function (s) { return savedKey(s) !== key; });
-        statusEl.textContent = `Removed from saved.`;
-        statusEl.className = 'status';
-    } else {
-        saved.push(item);
-        statusEl.textContent = `Saved "${item.label}".`;
-        statusEl.className = 'status success';
-        labelInput.value = '';
-    }
-
-    saveSaved(saved);
-    renderSaved();
-    updateSaveButton();
-}        function renderSaved() {
+        function renderSaved() {
             const saved = getSaved();
             savedList.innerHTML = '';
 
@@ -1491,15 +1493,17 @@ function saveCurrent() {
                 url += isTeam ? '&art=15' : '&art=3';
                 label = 'player list';
             } else if (currentView === 'rankings') {
-                url += isTeam ? '&art=16' : '&art=1';
-                label = isTeam ? 'team rankings' : 'rankings';
+                // art=0  -> Starting Rank list (individual)
+                // art=16 -> Team starting rank list
+                url += isTeam ? '&art=16' : '&art=0';
+                label = isTeam ? 'team starting rank' : 'starting rank';
             } else if (currentView === 'pairings') {
                 url += '&art=2&rd=-1';
                 label = 'pairings (current round)';
             } else if (currentView === 'playerinfo') {
                 const snr = snrInput.value.trim();
                 if (!snr || !/^\d+$/.test(snr)) {
-                    statusEl.textContent = 'Please enter a valid Starting Number (SNR) for Player Info.';
+                    statusEl.textContent = 'Please enter a valid Starting Rank (SNR) for Player Info.';
                     statusEl.className = 'status error';
                     return;
                 }
