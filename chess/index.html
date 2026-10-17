@@ -80,17 +80,83 @@
             margin-bottom: 15px;
         }
 
-        .controls {
+        /* ---------- Collapsible tournament section ---------- */
+        .tournament-section {
             background: var(--card);
-            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+            overflow: hidden;
+        }
+
+        .tournament-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 14px 20px;
+            cursor: pointer;
+            user-select: none;
+            background: var(--card);
+            border: none;
+            width: 100%;
+            text-align: left;
+            transition: background 0.2s;
+        }
+
+        .tournament-section-header:hover {
+            background: var(--primary-soft);
+        }
+
+        .tournament-section-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tournament-section-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--primary-dark);
+        }
+
+        .tournament-section-summary {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .tournament-section-chevron {
+            font-size: 0.8rem;
+            color: var(--primary-dark);
+            transition: transform 0.2s;
+            flex-shrink: 0;
+        }
+
+        .tournament-section.collapsed .tournament-section-chevron {
+            transform: rotate(-90deg);
+        }
+
+        .tournament-section-body {
+            padding: 0 20px 20px;
+        }
+
+        .tournament-section.collapsed .tournament-section-body {
+            display: none;
+        }
+
+        /* ---------- Controls card (inside tournament section) ---------- */
+        .controls {
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
             align-items: flex-end;
             margin-bottom: 15px;
-            border-left: 4px solid var(--primary);
+            padding-top: 4px;
         }
 
         .field {
@@ -183,6 +249,111 @@
             background: var(--accent-dark);
         }
 
+        /* ---------- Tab group inside tournament section ---------- */
+        .tab-group {
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 12px 16px;
+            border: 1px solid #eef1f4;
+        }
+
+        .tab-group.explore-group {
+            background: var(--card);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            padding: 12px 16px;
+            border-left: 4px solid var(--explore);
+            border-top: none;
+            border-right: none;
+            border-bottom: none;
+            margin-bottom: 15px;
+        }
+
+        .tab-group-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .tab-group-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+        }
+
+        .tab-group.explore-group .tab-group-title {
+            color: var(--explore-dark);
+        }
+
+        .tab-group-hint {
+            font-size: 0.72rem;
+            color: var(--text-light);
+            font-weight: 500;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .view-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tab-group .view-tabs button,
+        .tab-group.explore-group .view-tabs button {
+            padding: 8px 18px;
+            font-size: 0.9rem;
+            background: transparent;
+            border-width: 1.5px;
+            border-style: solid;
+            height: auto;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        /* Tournament tabs: blue */
+        .tab-group.tournament-tabs .view-tabs button {
+            color: var(--primary-dark);
+            border-color: var(--primary);
+        }
+
+        .tab-group.tournament-tabs .view-tabs button:hover {
+            background: var(--primary-soft);
+        }
+
+        .tab-group.tournament-tabs .view-tabs button.active {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* Explore tabs: purple */
+        .tab-group.explore-group .view-tabs button {
+            color: var(--explore-dark);
+            border-color: var(--explore);
+        }
+
+        .tab-group.explore-group .view-tabs button:hover {
+            background: var(--explore-soft);
+        }
+
+        .tab-group.explore-group .view-tabs button.active {
+            background: var(--explore);
+            color: #fff;
+        }
+
+        .snr-field {
+            display: none;
+        }
+
+        .snr-field.visible {
+            display: flex;
+        }
+
         .quick-access {
             background: var(--card);
             padding: 15px 20px;
@@ -268,117 +439,7 @@
             font-style: italic;
         }
 
-        .tab-groups {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .tab-group {
-            background: var(--card);
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            padding: 12px 16px;
-        }
-
-        .tab-group.tournament-group {
-            border-left: 4px solid var(--primary);
-        }
-
-        .tab-group.explore-group {
-            border-left: 4px solid var(--explore);
-        }
-
-        .tab-group-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-
-        .tab-group-title {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: var(--text-muted);
-        }
-
-        .tab-group.tournament-group .tab-group-title {
-            color: var(--primary-dark);
-        }
-
-        .tab-group.explore-group .tab-group-title {
-            color: var(--explore-dark);
-        }
-
-        .tab-group-hint {
-            font-size: 0.72rem;
-            color: var(--text-light);
-            font-weight: 500;
-            text-transform: none;
-            letter-spacing: 0;
-        }
-
-        .view-tabs {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .tab-group.tournament-group .view-tabs button {
-            padding: 8px 18px;
-            font-size: 0.9rem;
-            background: transparent;
-            color: var(--primary-dark);
-            border: 1.5px solid var(--primary);
-            height: auto;
-            border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s, color 0.2s;
-        }
-
-        .tab-group.tournament-group .view-tabs button:hover {
-            background: var(--primary-soft);
-        }
-
-        .tab-group.tournament-group .view-tabs button.active {
-            background: var(--primary);
-            color: #fff;
-        }
-
-        .tab-group.explore-group .view-tabs button {
-            padding: 8px 18px;
-            font-size: 0.9rem;
-            background: transparent;
-            color: var(--explore-dark);
-            border: 1.5px solid var(--explore);
-            height: auto;
-            border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s, color 0.2s;
-        }
-
-        .tab-group.explore-group .view-tabs button:hover {
-            background: var(--explore-soft);
-        }
-
-        .tab-group.explore-group .view-tabs button.active {
-            background: var(--explore);
-            color: #fff;
-        }
-
-        .snr-field {
-            display: none;
-        }
-
-        .snr-field.visible {
-            display: flex;
-        }
-
+        /* ---------- Viewer toolbar ---------- */
         .viewer-toolbar {
             display: flex;
             align-items: center;
@@ -645,10 +706,18 @@
                 padding: 12px 15px;
             }
 
+            .tournament-section-header {
+                padding: 12px 15px;
+            }
+
+            .tournament-section-body {
+                padding: 0 15px 15px;
+            }
+
             .controls {
                 flex-direction: column;
                 align-items: stretch;
-                padding: 15px;
+                padding: 0;
                 gap: 12px;
             }
 
@@ -673,10 +742,6 @@
                 font-size: 1rem;
             }
 
-            .tab-groups {
-                gap: 8px;
-            }
-
             .tab-group {
                 padding: 10px 12px;
             }
@@ -691,8 +756,7 @@
                 gap: 6px;
             }
 
-            .tab-group.tournament-group .view-tabs button,
-            .tab-group.explore-group .view-tabs button {
+            .tab-group .view-tabs button {
                 padding: 10px 6px;
                 font-size: 0.78rem;
                 text-align: center;
@@ -779,8 +843,16 @@
                 padding: 8px 12px;
             }
 
+            .tournament-section-header {
+                padding: 10px 12px;
+            }
+
+            .tournament-section-body {
+                padding: 0 12px 12px;
+            }
+
             .controls {
-                padding: 10px;
+                padding: 0;
                 gap: 8px;
             }
 
@@ -834,9 +906,29 @@
             </div>
         </div>
 
-        <div class="controls">
-            <div class="field">
-                <label for="sgpTournamentSelect">Singapore Tournament (SGP)</label>
+        <!-- ---------- Collapsible tournament section (collapsed by default) ---------- -->
+        <div class="tournament-section collapsed" id="tournamentSection">
+            <button
+                type="button"
+                class="tournament-section-header"
+                onclick="toggleTournamentSection()"
+                aria-expanded="false"
+                aria-controls="tournamentSectionBody"
+            >
+                <div class="tournament-section-header-left">
+                    <span class="tournament-section-title">🏁 Tournament Views</span>
+                    <span class="tournament-section-summary" id="tournamentSummary">
+                        Tap to expand and load a tournament
+                    </span>
+                </div>
+                <span class="tournament-section-chevron">▼</span>
+            </button>
+
+            <div class="tournament-section-body" id="tournamentSectionBody">
+                <!-- Controls: tournament ID, SNR, label, Load, Save -->
+                <div class="controls">
+                    <div class="field">
+                        <label for="sgpTournamentSelect">Singapore Tournament (SGP)</label>
 <!--
   SGP tournament list (manually maintained)
   Format: <option value="CHESS_RESULTS_ID" data-type="individual|team">Display Name</option>
@@ -847,90 +939,89 @@
     Player Info     -> both: art=9&snr=N   (N = Starting Rank)
   Add new tournaments at the top so they appear first.
 -->
-                <select id="sgpTournamentSelect" class="tournament-select" onchange="onSgpSelect(this.value)">
-                    <option value="">— Select a tournament —</option>
-                    <option value="1508846" data-type="individual">NAG 2026</option>
-                    <option value="1489169" data-type="team">NST 2026</option>
-                </select>
-            </div>
+                        <select id="sgpTournamentSelect" class="tournament-select" onchange="onSgpSelect(this.value)">
+                            <option value="">— Select a tournament —</option>
+                            <option value="1508846" data-type="individual">NAG 2026</option>
+                            <option value="1489169" data-type="team">NST 2026</option>
+                        </select>
+                    </div>
 
-            <div class="field">
-                <label for="tournamentId">Or enter any Tournament ID</label>
-                <input
-                    type="text"
-                    id="tournamentId"
-                    placeholder="e.g., 1420853"
-                    inputmode="numeric"
-                >
-            </div>
+                    <div class="field">
+                        <label for="tournamentId">Or enter any Tournament ID</label>
+                        <input
+                            type="text"
+                            id="tournamentId"
+                            placeholder="e.g., 1420853"
+                            inputmode="numeric"
+                        >
+                    </div>
 
-            <div class="field snr-field" id="snrField">
-                <label for="snrInput">Starting Rank (SNR)</label>
-                <input
-                    type="text"
-                    id="snrInput"
-                    class="snr-input"
-                    placeholder="e.g., 1"
-                    inputmode="numeric"
-                >
-            </div>
+                    <div class="field snr-field" id="snrField">
+                        <label for="snrInput">Starting Rank (SNR)</label>
+                        <input
+                            type="text"
+                            id="snrInput"
+                            class="snr-input"
+                            placeholder="e.g., 1"
+                            inputmode="numeric"
+                        >
+                    </div>
 
-            <div class="field">
-                <label for="labelInput">Label (for save)</label>
-                <input
-                    type="text"
-                    id="labelInput"
-                    class="label-input"
-                    placeholder="e.g., 2026 X Rapid"
-                    maxlength="60"
-                >
-            </div>
+                    <div class="field">
+                        <label for="labelInput">Label (for save)</label>
+                        <input
+                            type="text"
+                            id="labelInput"
+                            class="label-input"
+                            placeholder="e.g., 2026 X Rapid"
+                            maxlength="60"
+                        >
+                    </div>
 
-            <button class="btn-primary" onclick="loadView()">Load</button>
-            <button id="saveBtn" class="btn-save" onclick="saveCurrent()">☆ Save</button>
+                    <button class="btn-primary" onclick="loadView()">Load</button>
+                    <button id="saveBtn" class="btn-save" onclick="saveCurrent()">☆ Save</button>
+                </div>
+
+                <!-- Tournament Views tabs -->
+                <div class="tab-group tournament-tabs" id="tournamentTabsGroup">
+                    <div class="tab-group-header">
+                        <span class="tab-group-title">Views</span>
+                    </div>
+                    <div class="view-tabs" id="tournamentTabs">
+                        <button data-view="players" class="active" onclick="setView('players')">
+                            👥 Player List
+                        </button>
+                        <button data-view="rankings" onclick="setView('rankings')">
+                            🏆 Starting Rank
+                        </button>
+                        <button data-view="pairings" onclick="setView('pairings')">
+                            ⚔ Pairings
+                        </button>
+                        <button data-view="playerinfo" onclick="setView('playerinfo')">
+                            🪪 Player Info
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="tab-groups">
-
-            <div class="tab-group tournament-group">
-                <div class="tab-group-header">
-                    <span class="tab-group-title">🏁 Tournament Views</span>
-                    <span class="tab-group-hint">uses the tournament ID above</span>
-                </div>
-                <div class="view-tabs" id="tournamentTabs">
-                    <button data-view="players" class="active" onclick="setView('players')">
-                        👥 Player List
-                    </button>
-                    <button data-view="rankings" onclick="setView('rankings')">
-                        🏆 Starting Rank
-                    </button>
-                    <button data-view="pairings" onclick="setView('pairings')">
-                        ⚔ Pairings
-                    </button>
-                    <button data-view="playerinfo" onclick="setView('playerinfo')">
-                        🪪 Player Info
-                    </button>
-                </div>
+        <!-- ---------- Explore group (always visible) ---------- -->
+        <div class="tab-group explore-group" id="exploreTabsGroup">
+            <div class="tab-group-header">
+                <span class="tab-group-title">🧭 Explore</span>
+                <span class="tab-group-hint">no tournament ID needed</span>
             </div>
-
-            <div class="tab-group explore-group">
-                <div class="tab-group-header">
-                    <span class="tab-group-title">🧭 Explore</span>
-                    <span class="tab-group-hint">no tournament ID needed</span>
-                </div>
-                <div class="view-tabs" id="exploreTabs">
-                    <button data-view="events" onclick="setView('events')">
-                        📅 Tournaments
-                    </button>
-                    <button data-view="search" onclick="setView('search')">
-                        🔍 Search FIDE Player
-                    </button>
-                    <button data-view="fide" onclick="setView('fide')">
-                        🪪 NAG Player Search
-                    </button>
-                </div>
+            <div class="view-tabs" id="exploreTabs">
+                <button data-view="events" onclick="setView('events')">
+                    📅 Tournaments
+                </button>
+                <button data-view="search" onclick="setView('search')">
+                    🔍 Search FIDE Player
+                </button>
+                <button data-view="fide" onclick="setView('fide')">
+                    🪪 Search NAG Player
+                </button>
             </div>
-
         </div>
 
         <div class="viewer-toolbar">
@@ -943,7 +1034,7 @@
                         title="Zoom out"
                         aria-label="Zoom out"
                     >−</button>
-                    <span class="zoom-level" id="zoomLevel">50%</span>
+                    <span class="zoom-level" id="zoomLevel">80%</span>
                     <button
                         id="zoomInBtn"
                         onclick="changeZoom(0.1)"
@@ -1021,13 +1112,16 @@
         const fideResultTitle = document.getElementById('fideResultTitle');
         const fideAttrList = document.getElementById('fideAttrList');
 
+        const tournamentSection = document.getElementById('tournamentSection');
+        const tournamentSummary = document.getElementById('tournamentSummary');
+
         let currentView = 'players';
 
         /* ---------------- Zoom state ---------------- */
-        const ZOOM_MIN = 0.4;
+        const ZOOM_MIN = 0.8;
         const ZOOM_MAX = 1.5;
         const ZOOM_KEY = 'chessViewer.zoom';
-        let zoom = 0.5;
+        let zoom = 0.8;
 
         const DESKTOP_WIDTH = 1100;
         const BASE_IFRAME_HEIGHT = 750;
@@ -1043,12 +1137,39 @@
         const RECENT_KEY = 'chessViewer.recent';
         const RECENT_LIMIT = 6;
 
+        /* ---------------- Collapsible tournament section ---------------- */
+        // Default state is collapsed; only expand if the user previously expanded it
+        function toggleTournamentSection() {
+            tournamentSection.classList.toggle('collapsed');
+            const collapsed = tournamentSection.classList.contains('collapsed');
+            const header = tournamentSection.querySelector('.tournament-section-header');
+            if (header) header.setAttribute('aria-expanded', String(!collapsed));
+            // No persistence — every reload starts collapsed
+        }
+
+        function expandTournamentSection() {
+            if (tournamentSection.classList.contains('collapsed')) {
+                tournamentSection.classList.remove('collapsed');
+                const header = tournamentSection.querySelector('.tournament-section-header');
+                if (header) header.setAttribute('aria-expanded', 'true');
+            }
+        }
+
+        function updateTournamentSummary() {
+            const id = tournamentInput.value.trim();
+            if (!id) {
+                tournamentSummary.textContent = 'Tap to expand and load a tournament';
+                return;
+            }
+            const known = getKnownLabel(id);
+            tournamentSummary.textContent = known ? known : ('Tournament ' + id);
+        }
+
         /* ---------------- Storage helpers ---------------- */
         function getSaved() {
             try {
                 const raw = localStorage.getItem(SAVED_KEY);
                 if (raw) return JSON.parse(raw) || [];
-                // Migrate from old favourites list (assume they're all tournaments)
                 const legacy = JSON.parse(localStorage.getItem(LEGACY_FAV_KEY)) || [];
                 return legacy.map(function (f) {
                     return { type: 'tournament', id: f.id, label: f.label };
@@ -1140,7 +1261,7 @@
             return 'Tournament ' + id;
         }
 
-        /* ---------------- Saved items: tournaments and players ---------------- */
+        /* ---------------- Saved items ---------------- */
         function savedKey(item) {
             if (item.type === 'player') return 'p:' + item.id + ':' + item.snr;
             return 't:' + item.id;
@@ -1151,7 +1272,6 @@
             return getSaved().some(function (s) { return savedKey(s) === key; });
         }
 
-        // Save/unsave the current view
         function saveCurrent() {
             const id = tournamentInput.value.trim();
             if (!id || !/^\d+$/.test(id)) {
@@ -1160,7 +1280,6 @@
                 return;
             }
 
-            // Determine what we're saving
             let item;
             if (currentView === 'playerinfo') {
                 const snr = snrInput.value.trim();
@@ -1170,9 +1289,6 @@
                     return;
                 }
 
-                // Label logic:
-                //   - If the user typed a custom label -> use it as-is (no SNR suffix)
-                //   - Otherwise -> use the tournament name + " · SNR N"
                 const customLabel = labelInput.value.trim();
                 let playerLabel;
                 if (customLabel) {
@@ -1240,6 +1356,8 @@
                 saveBtn.textContent = '☆ Save';
                 saveBtn.classList.remove('active');
             }
+
+            updateTournamentSummary();
         }
 
         /* ---------------- Recent history logic ---------------- */
@@ -1316,13 +1434,14 @@
                 tournamentInput.value = item.id;
                 sgpSelect.value = getKnownLabel(item.id) ? item.id : '';
 
+                // Auto-expand the tournament section when a chip is clicked
+                expandTournamentSection();
+
                 if (item.type === 'player') {
-                    // Pre-fill SNR and switch to Player Info tab
                     snrInput.value = item.snr;
                     labelInput.value = '';
                     setView('playerinfo');
                 } else {
-                    // Tournament: restore label and load Player List
                     labelInput.value = item.label.startsWith('Tournament ') ? '' : item.label;
                     if (currentView === 'fide' || currentView === 'search' || currentView === 'events') {
                         setView('players');
@@ -1384,6 +1503,8 @@
             const opt = sgpSelect.options[sgpSelect.selectedIndex];
             labelInput.value = opt ? opt.textContent : '';
             updateSaveButton();
+            // Auto-expand the section when selecting a tournament
+            expandTournamentSection();
             if (currentView === 'events' || currentView === 'search' || currentView === 'fide') {
                 setView('players');
             } else {
@@ -1427,6 +1548,9 @@
                 updateSaveButton();
                 return;
             }
+
+            // For tournament views, auto-expand the section
+            expandTournamentSection();
 
             if (tournamentInput.value.trim()) {
                 loadView();
@@ -1493,8 +1617,6 @@
                 url += isTeam ? '&art=15' : '&art=3';
                 label = 'player list';
             } else if (currentView === 'rankings') {
-                // art=0  -> Starting Rank list (individual)
-                // art=16 -> Team starting rank list
                 url += isTeam ? '&art=16' : '&art=0';
                 label = isTeam ? 'team starting rank' : 'starting rank';
             } else if (currentView === 'pairings') {
