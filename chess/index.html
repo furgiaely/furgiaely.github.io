@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#3498db">
+    <meta name="theme-color" content="#4f46e5">
     <link rel="apple-touch-icon" href="https://i.ibb.co/7d38hKZ8/chess.png">
     <title>Chess Results</title>
     <style>
@@ -14,35 +14,55 @@
         }
 
         :root {
-            --primary: #3498db;
-            --primary-dark: #2980b9;
-            --primary-soft: #eaf4fc;
+            /* ---- Primary action: Search button ---- */
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --primary-soft: #eef2ff;
 
-            --accent: #f39c12;
-            --accent-dark: #e67e22;
-            --accent-soft: #fdf3e3;
+            /* ---- Secondary action: Load button (in match cards) ---- */
+            --load: #7c3aed;
+            --load-dark: #6d28d9;
+            --load-soft: #f5f3ff;
 
-            --saved: #e67e22;
-            --saved-soft: #fdf3e3;
+            /* ---- Save action ---- */
+            --save: #d97706;
+            --save-dark: #b45309;
+            --save-soft: #fef3c7;
 
-            --recent: #16a085;
-            --recent-soft: #e8f7f3;
+            /* ---- Tournament group ---- */
+            --tournament: #0d9488;
+            --tournament-dark: #0f766e;
+            --tournament-soft: #ccfbf1;
 
-            --explore: #9b59b6;
-            --explore-dark: #8e44ad;
-            --explore-soft: #f4ecf9;
+            /* ---- Explore group ---- */
+            --explore: #e11d48;
+            --explore-dark: #be123c;
+            --explore-soft: #ffe4e6;
 
-            --panel-header: #34495e;
-            --panel-header-text: #ffffff;
+            /* ---- Recent chips ---- */
+            --recent: #475569;
+            --recent-soft: #e2e8f0;
 
-            --text: #2c3e50;
-            --text-muted: #7f8c8d;
-            --text-light: #95a5a6;
-            --bg: #f4f6f9;
+            /* ---- Mode toggle (neutral filter) ---- */
+            --toggle-bg: #e2e8f0;
+            --toggle-text: #475569;
+            --toggle-active: #1e293b;
+
+            /* ---- Panel header ---- */
+            --panel-header: #1e293b;
+            --panel-header-text: #f8fafc;
+
+            /* ---- Neutrals ---- */
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --text-light: #94a3b8;
+            --bg: #f1f5f9;
             --card: #ffffff;
-            --border: #dcdde1;
-            --success: #27ae60;
-            --danger: #e74c3c;
+            --border: #cbd5e1;
+
+            /* ---- Status ---- */
+            --success: #059669;
+            --danger: #dc2626;
         }
 
         html {
@@ -67,7 +87,7 @@
         h1 {
             font-size: 1.6rem;
             margin-bottom: 8px;
-            color: #1a252f;
+            color: #0f172a;
         }
 
         .subtitle {
@@ -80,13 +100,13 @@
             margin-bottom: 15px;
         }
 
-        /* ---------- Collapsible tournament section ---------- */
+        /* ---------- Tournament section ---------- */
         .tournament-section {
             background: var(--card);
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             margin-bottom: 15px;
-            border-left: 4px solid var(--primary);
+            border-left: 4px solid var(--tournament);
             overflow: hidden;
         }
 
@@ -106,7 +126,7 @@
         }
 
         .tournament-section-header:hover {
-            background: var(--primary-soft);
+            background: var(--tournament-soft);
         }
 
         .tournament-section-header-left {
@@ -121,7 +141,7 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.8px;
-            color: var(--primary-dark);
+            color: var(--tournament-dark);
         }
 
         .tournament-section-summary {
@@ -132,7 +152,7 @@
 
         .tournament-section-chevron {
             font-size: 0.8rem;
-            color: var(--primary-dark);
+            color: var(--tournament-dark);
             transition: transform 0.2s;
             flex-shrink: 0;
         }
@@ -149,7 +169,7 @@
             display: none;
         }
 
-        /* ---------- Controls card (inside tournament section) ---------- */
+        /* ---------- Controls ---------- */
         .controls {
             display: flex;
             flex-wrap: wrap;
@@ -170,7 +190,7 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: #576574;
+            color: #475569;
         }
 
         .field input,
@@ -202,6 +222,7 @@
             width: 200px;
         }
 
+        /* ---------- Buttons ---------- */
         .btn-primary {
             padding: 10px 22px;
             background: var(--primary);
@@ -224,13 +245,13 @@
         }
 
         .btn-primary:disabled {
-            background: #b2bec3;
+            background: #94a3b8;
             cursor: not-allowed;
         }
 
         .btn-save {
             padding: 10px 18px;
-            background: var(--saved);
+            background: var(--save);
             color: #fff;
             border: none;
             border-radius: 6px;
@@ -242,19 +263,19 @@
         }
 
         .btn-save:hover {
-            background: var(--accent-dark);
+            background: var(--save-dark);
         }
 
         .btn-save.active {
-            background: var(--accent-dark);
+            background: var(--save-dark);
         }
 
-        /* ---------- Tab group inside tournament section ---------- */
+        /* ---------- Tab groups ---------- */
         .tab-group {
             background: var(--bg);
             border-radius: 10px;
             padding: 12px 16px;
-            border: 1px solid #eef1f4;
+            border: 1px solid #e2e8f0;
         }
 
         .tab-group.explore-group {
@@ -284,6 +305,10 @@
             color: var(--text-muted);
         }
 
+        .tab-group.tournament-tabs .tab-group-title {
+            color: var(--tournament-dark);
+        }
+
         .tab-group.explore-group .tab-group-title {
             color: var(--explore-dark);
         }
@@ -302,8 +327,7 @@
             flex-wrap: wrap;
         }
 
-        .tab-group .view-tabs button,
-        .tab-group.explore-group .view-tabs button {
+        .tab-group .view-tabs button {
             padding: 8px 18px;
             font-size: 0.9rem;
             background: transparent;
@@ -317,16 +341,16 @@
         }
 
         .tab-group.tournament-tabs .view-tabs button {
-            color: var(--primary-dark);
-            border-color: var(--primary);
+            color: var(--tournament-dark);
+            border-color: var(--tournament);
         }
 
         .tab-group.tournament-tabs .view-tabs button:hover {
-            background: var(--primary-soft);
+            background: var(--tournament-soft);
         }
 
         .tab-group.tournament-tabs .view-tabs button.active {
-            background: var(--primary);
+            background: var(--tournament);
             color: #fff;
         }
 
@@ -352,6 +376,7 @@
             display: flex;
         }
 
+        /* ---------- Quick access ---------- */
         .quick-access {
             background: var(--card);
             padding: 15px 20px;
@@ -369,7 +394,7 @@
         }
 
         .quick-access-row + .quick-access-row {
-            border-top: 1px solid #f1f2f6;
+            border-top: 1px solid #f1f5f9;
         }
 
         .quick-access-label {
@@ -377,7 +402,7 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: #576574;
+            color: #475569;
             min-width: 110px;
         }
 
@@ -396,21 +421,21 @@
         }
 
         .chip.chip-saved {
-            background: var(--saved-soft);
-            color: #a35a1a;
+            background: var(--save-soft);
+            color: var(--save-dark);
         }
 
         .chip.chip-saved:hover {
-            background: #f7e3c6;
+            background: #fde68a;
         }
 
         .chip.chip-recent {
             background: var(--recent-soft);
-            color: #0e6d5a;
+            color: var(--recent);
         }
 
         .chip.chip-recent:hover {
-            background: #d5efe8;
+            background: #cbd5e1;
         }
 
         .chip .chip-sub {
@@ -428,12 +453,12 @@
         }
 
         .chip .chip-remove:hover {
-            color: #c0392b;
+            color: #b91c1c;
         }
 
         .chip-empty {
             font-size: 0.8rem;
-            color: #b2bec3;
+            color: #cbd5e1;
             font-style: italic;
         }
 
@@ -447,7 +472,7 @@
             background: var(--card);
             padding: 10px 15px;
             border-radius: 10px 10px 0 0;
-            border-bottom: 1px solid #f1f2f6;
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .viewer-toolbar-label {
@@ -455,7 +480,7 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: #576574;
+            color: #475569;
         }
 
         .viewer-toolbar-actions {
@@ -468,14 +493,14 @@
         .zoom-controls {
             display: inline-flex;
             align-items: center;
-            background: #eef1f4;
+            background: var(--toggle-bg);
             border-radius: 20px;
             overflow: hidden;
         }
 
         .zoom-controls button {
             background: transparent;
-            color: #4b5c6b;
+            color: var(--toggle-text);
             border: none;
             width: 36px;
             height: 36px;
@@ -488,7 +513,7 @@
         }
 
         .zoom-controls button:hover {
-            background: #dfe4e8;
+            background: #cbd5e1;
         }
 
         .zoom-controls button:disabled {
@@ -499,7 +524,7 @@
         .zoom-controls .zoom-level {
             font-size: 0.8rem;
             font-weight: 700;
-            color: #4b5c6b;
+            color: var(--toggle-text);
             min-width: 46px;
             text-align: center;
             padding: 0 4px;
@@ -570,33 +595,35 @@
             display: block;
         }
 
-        /* Mode toggle */
+        /* Mode toggle: neutral slate segmented control (not an action) */
         .fide-mode-toggle {
-            display: flex;
-            gap: 6px;
+            display: inline-flex;
+            background: var(--toggle-bg);
+            border-radius: 20px;
+            padding: 3px;
+            gap: 2px;
             margin-bottom: 14px;
         }
 
         .fide-mode-toggle button {
-            flex: 1;
-            padding: 9px 12px;
-            font-size: 0.85rem;
+            padding: 7px 16px;
+            font-size: 0.82rem;
             font-weight: 600;
             background: transparent;
-            color: var(--primary-dark);
-            border: 1.5px solid var(--primary);
-            border-radius: 20px;
+            color: var(--toggle-text);
+            border: none;
+            border-radius: 17px;
             cursor: pointer;
             transition: background 0.2s, color 0.2s;
             height: auto;
         }
 
         .fide-mode-toggle button:hover {
-            background: var(--primary-soft);
+            background: #cbd5e1;
         }
 
         .fide-mode-toggle button.active {
-            background: var(--primary);
+            background: var(--toggle-active);
             color: #fff;
         }
 
@@ -613,7 +640,7 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: #576574;
+            color: #475569;
             margin-bottom: 5px;
         }
 
@@ -657,7 +684,7 @@
             border-radius: 10px;
             overflow: hidden;
             display: none;
-            border: 1px solid #f1f2f6;
+            border: 1px solid #e2e8f0;
             margin-bottom: 14px;
         }
 
@@ -688,7 +715,7 @@
             align-items: baseline;
             gap: 12px;
             padding: 10px 0;
-            border-bottom: 1px solid #f1f2f6;
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .fide-attr-row:last-child {
@@ -725,7 +752,7 @@
             gap: 12px;
             padding: 12px 14px;
             background: var(--card);
-            border: 1px solid #eef1f4;
+            border: 1px solid #e2e8f0;
             border-radius: 8px;
         }
 
@@ -748,12 +775,13 @@
             color: var(--text-muted);
         }
 
+        /* Load button in match cards: violet (secondary action) */
         .fide-match-card .btn-load {
             height: 36px;
             padding: 6px 16px;
             font-size: 0.82rem;
             flex-shrink: 0;
-            background: var(--primary);
+            background: var(--load);
             color: #fff;
             border: none;
             border-radius: 6px;
@@ -763,10 +791,9 @@
         }
 
         .fide-match-card .btn-load:hover {
-            background: var(--primary-dark);
+            background: var(--load-dark);
         }
 
-        /* Back button on player detail view */
         .fide-back-btn {
             display: inline-flex;
             align-items: center;
@@ -922,6 +949,15 @@
                 padding: 15px;
             }
 
+            .fide-mode-toggle {
+                width: 100%;
+                display: flex;
+            }
+
+            .fide-mode-toggle button {
+                flex: 1;
+            }
+
             .fide-attr-row {
                 flex-direction: column;
                 align-items: flex-start;
@@ -1024,7 +1060,6 @@
             </div>
         </div>
 
-        <!-- ---------- Collapsible tournament section (collapsed by default) ---------- -->
         <div class="tournament-section collapsed" id="tournamentSection">
             <button
                 type="button"
@@ -1046,16 +1081,6 @@
                 <div class="controls">
                     <div class="field">
                         <label for="sgpTournamentSelect">Singapore Tournament (SGP)</label>
-<!--
-  SGP tournament list (manually maintained)
-  Format: <option value="CHESS_RESULTS_ID" data-type="individual|team">Display Name</option>
-  Art values used by this viewer:
-    Player List     -> individual: art=3   | team: art=15
-    Starting Rank   -> individual: art=0   | team: art=16
-    Pairings        -> both: art=2 (current round)
-    Player Info     -> both: art=9&snr=N   (N = Starting Rank)
-  Add new tournaments at the top so they appear first.
--->
                         <select id="sgpTournamentSelect" class="tournament-select" onchange="onSgpSelect(this.value)">
                             <option value="">— Select a tournament —</option>
                             <option value="1508846" data-type="individual">NAG 2026</option>
@@ -1121,7 +1146,6 @@
             </div>
         </div>
 
-        <!-- ---------- Explore group (always visible) ---------- -->
         <div class="tab-group explore-group" id="exploreTabsGroup">
             <div class="tab-group-header">
                 <span class="tab-group-title">🧭 Explore</span>
@@ -1172,7 +1196,6 @@
                 ></iframe>
             </div>
 
-            <!-- FIDE panel with mode toggle + multi-match support -->
             <div class="fide-panel" id="fidePanel">
                 <div class="fide-mode-toggle">
                     <button
@@ -1202,10 +1225,8 @@
 
                 <div class="fide-status" id="fideStatus"></div>
 
-                <!-- Back button (shown only when a match is loaded into detail view) -->
                 <button id="fideBackBtn" class="fide-back-btn hidden" onclick="backToMatches()">← Back to matches</button>
 
-                <!-- Single player result (FIDE ID mode or loaded match) -->
                 <div class="fide-result" id="fideResult">
                     <div class="fide-result-header">
                         <h2 id="fideResultTitle">Player Found</h2>
@@ -1213,7 +1234,6 @@
                     <div class="fide-attr-list" id="fideAttrList"></div>
                 </div>
 
-                <!-- Multi-match result (Name mode) -->
                 <div class="fide-result" id="fideMultiResult">
                     <div class="fide-result-header">
                         <h2 id="fideMultiTitle">Matches</h2>
@@ -1266,9 +1286,8 @@
         const tournamentSummary = document.getElementById('tournamentSummary');
 
         let currentView = 'players';
-        let fideMode = 'name'; // default to name search
+        let fideMode = 'name';
 
-        /* Cache last matches so the back button can restore the list */
         let lastMatches = [];
         let lastMatchQuery = '';
 
@@ -1514,7 +1533,7 @@
             updateTournamentSummary();
         }
 
-        /* ---------------- Recent history logic ---------------- */
+        /* ---------------- Recent history ---------------- */
         function addToRecent(id) {
             let recent = getRecent();
             recent = recent.filter(function (r) { return r.id !== id; });
@@ -1637,23 +1656,17 @@
 
         /* ---------------- Input listeners ---------------- */
         tournamentInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                loadView();
-            }
+            if (e.key === 'Enter') loadView();
         });
 
         snrInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                loadView();
-            }
+            if (e.key === 'Enter') loadView();
         });
 
         snrInput.addEventListener('input', updateSaveButton);
 
         labelInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                saveCurrent();
-            }
+            if (e.key === 'Enter') saveCurrent();
         });
 
         tournamentInput.addEventListener('input', function () {
@@ -1664,9 +1677,7 @@
         });
 
         fideSearchInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                searchFidePlayer();
-            }
+            if (e.key === 'Enter') searchFidePlayer();
         });
 
         /* ---------------- SGP dropdown ---------------- */
@@ -1730,7 +1741,7 @@
             }
         }
 
-        /* ---------------- Events page loader ---------------- */
+        /* ---------------- Events / Search page loaders ---------------- */
         function loadEventsPage() {
             statusEl.textContent = 'Loading SGP tournament list...';
             statusEl.className = 'status';
@@ -1749,7 +1760,6 @@
             };
         }
 
-        /* ---------------- Player search loader ---------------- */
         function loadSearchPage() {
             statusEl.textContent = 'Loading player search...';
             statusEl.className = 'status';
