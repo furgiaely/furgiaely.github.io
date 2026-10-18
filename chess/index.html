@@ -316,7 +316,6 @@
             transition: background 0.2s, color 0.2s;
         }
 
-        /* Tournament tabs: blue */
         .tab-group.tournament-tabs .view-tabs button {
             color: var(--primary-dark);
             border-color: var(--primary);
@@ -331,7 +330,6 @@
             color: #fff;
         }
 
-        /* Explore tabs: purple */
         .tab-group.explore-group .view-tabs button {
             color: var(--explore-dark);
             border-color: var(--explore);
@@ -559,6 +557,7 @@
             display: none !important;
         }
 
+        /* ---------- FIDE panel ---------- */
         .fide-panel {
             background: var(--card);
             border-radius: 0 0 10px 10px;
@@ -569,6 +568,36 @@
 
         .fide-panel.visible {
             display: block;
+        }
+
+        /* Mode toggle */
+        .fide-mode-toggle {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .fide-mode-toggle button {
+            flex: 1;
+            padding: 9px 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: transparent;
+            color: var(--primary-dark);
+            border: 1.5px solid var(--primary);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            height: auto;
+        }
+
+        .fide-mode-toggle button:hover {
+            background: var(--primary-soft);
+        }
+
+        .fide-mode-toggle button.active {
+            background: var(--primary);
+            color: #fff;
         }
 
         .fide-search-card {
@@ -629,6 +658,7 @@
             overflow: hidden;
             display: none;
             border: 1px solid #f1f2f6;
+            margin-bottom: 14px;
         }
 
         .fide-result.visible {
@@ -679,6 +709,83 @@
             color: var(--text);
             text-align: right;
             word-break: break-word;
+        }
+
+        /* Multi-match list */
+        .fide-match-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .fide-match-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            background: var(--card);
+            border: 1px solid #eef1f4;
+            border-radius: 8px;
+        }
+
+        .fide-match-card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .fide-match-card-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+            word-break: break-word;
+        }
+
+        .fide-match-card-meta {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .fide-match-card .btn-load {
+            height: 36px;
+            padding: 6px 16px;
+            font-size: 0.82rem;
+            flex-shrink: 0;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .fide-match-card .btn-load:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Back button on player detail view */
+        .fide-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: transparent;
+            color: var(--primary-dark);
+            border: 1.5px solid var(--primary);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 12px;
+            height: auto;
+            transition: background 0.2s;
+        }
+
+        .fide-back-btn:hover {
+            background: var(--primary-soft);
         }
 
         @media (max-width: 900px) {
@@ -824,6 +931,17 @@
             .fide-attr-value {
                 text-align: left;
             }
+
+            .fide-match-card {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+
+            .fide-match-card .btn-load {
+                width: 100%;
+                height: 40px;
+            }
         }
 
         @media (orientation: landscape) and (max-height: 500px) {
@@ -925,7 +1043,6 @@
             </button>
 
             <div class="tournament-section-body" id="tournamentSectionBody">
-                <!-- Controls: tournament ID, SNR, label, Load, Save -->
                 <div class="controls">
                     <div class="field">
                         <label for="sgpTournamentSelect">Singapore Tournament (SGP)</label>
@@ -982,7 +1099,6 @@
                     <button id="saveBtn" class="btn-save" onclick="saveCurrent()">☆ Save</button>
                 </div>
 
-                <!-- Tournament Views tabs -->
                 <div class="tab-group tournament-tabs" id="tournamentTabsGroup">
                     <div class="tab-group-header">
                         <span class="tab-group-title">Views</span>
@@ -1056,16 +1172,29 @@
                 ></iframe>
             </div>
 
+            <!-- FIDE panel with mode toggle + multi-match support -->
             <div class="fide-panel" id="fidePanel">
+                <div class="fide-mode-toggle">
+                    <button
+                        id="modeNameBtn"
+                        class="active"
+                        onclick="setFideMode('name')"
+                    >Name</button>
+                    <button
+                        id="modeFideBtn"
+                        onclick="setFideMode('fide')"
+                    >FIDE ID</button>
+                </div>
+
                 <div class="fide-search-card">
                     <div class="field">
-                        <label for="fideIdInput">FIDE ID</label>
+                        <label for="fideSearchInput" id="fideSearchLabel">Name</label>
                         <input
                             type="text"
-                            id="fideIdInput"
-                            placeholder="e.g., 1503014"
-                            inputmode="numeric"
-                            value="5836352"
+                            id="fideSearchInput"
+                            placeholder="e.g., Tan"
+                            inputmode="text"
+                            value="Tan"
                         >
                     </div>
                     <button id="fideSearchBtn" class="btn-primary" onclick="searchFidePlayer()">Search</button>
@@ -1073,11 +1202,25 @@
 
                 <div class="fide-status" id="fideStatus"></div>
 
+                <!-- Back button (shown only when a match is loaded into detail view) -->
+                <button id="fideBackBtn" class="fide-back-btn hidden" onclick="backToMatches()">← Back to matches</button>
+
+                <!-- Single player result (FIDE ID mode or loaded match) -->
                 <div class="fide-result" id="fideResult">
                     <div class="fide-result-header">
                         <h2 id="fideResultTitle">Player Found</h2>
                     </div>
                     <div class="fide-attr-list" id="fideAttrList"></div>
+                </div>
+
+                <!-- Multi-match result (Name mode) -->
+                <div class="fide-result" id="fideMultiResult">
+                    <div class="fide-result-header">
+                        <h2 id="fideMultiTitle">Matches</h2>
+                    </div>
+                    <div class="fide-attr-list">
+                        <div class="fide-match-list" id="fideMatchList"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1105,17 +1248,29 @@
         const zoomOutBtn = document.getElementById('zoomOutBtn');
 
         const fidePanel = document.getElementById('fidePanel');
-        const fideIdInput = document.getElementById('fideIdInput');
+        const fideSearchInput = document.getElementById('fideSearchInput');
+        const fideSearchLabel = document.getElementById('fideSearchLabel');
         const fideSearchBtn = document.getElementById('fideSearchBtn');
+        const modeFideBtn = document.getElementById('modeFideBtn');
+        const modeNameBtn = document.getElementById('modeNameBtn');
         const fideStatus = document.getElementById('fideStatus');
         const fideResult = document.getElementById('fideResult');
         const fideResultTitle = document.getElementById('fideResultTitle');
         const fideAttrList = document.getElementById('fideAttrList');
+        const fideMultiResult = document.getElementById('fideMultiResult');
+        const fideMultiTitle = document.getElementById('fideMultiTitle');
+        const fideMatchList = document.getElementById('fideMatchList');
+        const fideBackBtn = document.getElementById('fideBackBtn');
 
         const tournamentSection = document.getElementById('tournamentSection');
         const tournamentSummary = document.getElementById('tournamentSummary');
 
         let currentView = 'players';
+        let fideMode = 'name'; // default to name search
+
+        /* Cache last matches so the back button can restore the list */
+        let lastMatches = [];
+        let lastMatchQuery = '';
 
         /* ---------------- Zoom state ---------------- */
         const ZOOM_MIN = 0.8;
@@ -1138,13 +1293,11 @@
         const RECENT_LIMIT = 6;
 
         /* ---------------- Collapsible tournament section ---------------- */
-        // Default state is collapsed; only expand if the user previously expanded it
         function toggleTournamentSection() {
             tournamentSection.classList.toggle('collapsed');
             const collapsed = tournamentSection.classList.contains('collapsed');
             const header = tournamentSection.querySelector('.tournament-section-header');
             if (header) header.setAttribute('aria-expanded', String(!collapsed));
-            // No persistence — every reload starts collapsed
         }
 
         function expandTournamentSection() {
@@ -1263,6 +1416,7 @@
 
         /* ---------------- Saved items ---------------- */
         function savedKey(item) {
+            if (item.key) return item.key;
             if (item.type === 'player') return 'p:' + item.id + ':' + item.snr;
             return 't:' + item.id;
         }
@@ -1397,15 +1551,21 @@
         function makeChip(item, isSavedChip) {
             const chip = document.createElement('button');
             chip.className = 'chip ' + (isSavedChip ? 'chip-saved' : 'chip-recent');
-            chip.title = item.type === 'player'
-                ? `Open player (SNR ${item.snr}) in tournament ${item.id}`
-                : `Load tournament ${item.id}`;
+
+            const isNamePlayer = item.key && item.key.indexOf('p-name:') === 0;
+            const isTournamentPlayer = item.type === 'player' && item.snr && item.id;
+
+            chip.title = isNamePlayer
+                ? `Show saved player: ${item.label}`
+                : isTournamentPlayer
+                    ? `Open player (SNR ${item.snr}) in tournament ${item.id}`
+                    : `Load tournament ${item.id}`;
 
             const labelSpan = document.createElement('span');
             labelSpan.textContent = item.label;
             chip.appendChild(labelSpan);
 
-            if (item.type === 'player') {
+            if (isTournamentPlayer || isNamePlayer) {
                 const sub = document.createElement('span');
                 sub.className = 'chip-sub';
                 sub.textContent = '🪪';
@@ -1431,10 +1591,23 @@
             }
 
             chip.addEventListener('click', function () {
+                if (isNamePlayer) {
+                    setView('fide');
+                    setFideMode('name');
+                    fideSearchLabel.textContent = 'Saved player';
+                    fideSearchInput.value = item.label;
+                    fideMultiResult.classList.remove('visible');
+                    fideBackBtn.classList.add('hidden');
+                    if (item.data) {
+                        renderFidePlayer(item.data);
+                        fideStatus.textContent = 'Loaded saved player.';
+                        fideStatus.className = 'fide-status success';
+                    }
+                    return;
+                }
+
                 tournamentInput.value = item.id;
                 sgpSelect.value = getKnownLabel(item.id) ? item.id : '';
-
-                // Auto-expand the tournament section when a chip is clicked
                 expandTournamentSection();
 
                 if (item.type === 'player') {
@@ -1490,7 +1663,7 @@
             updateSaveButton();
         });
 
-        fideIdInput.addEventListener('keydown', function (e) {
+        fideSearchInput.addEventListener('keydown', function (e) {
             if (e.key === 'Enter') {
                 searchFidePlayer();
             }
@@ -1503,7 +1676,6 @@
             const opt = sgpSelect.options[sgpSelect.selectedIndex];
             labelInput.value = opt ? opt.textContent : '';
             updateSaveButton();
-            // Auto-expand the section when selecting a tournament
             expandTournamentSection();
             if (currentView === 'events' || currentView === 'search' || currentView === 'fide') {
                 setView('players');
@@ -1528,7 +1700,7 @@
                 fidePanel.classList.add('visible');
                 statusEl.textContent = '';
                 statusEl.className = 'status';
-                if (!fideResult.classList.contains('visible')) {
+                if (!fideResult.classList.contains('visible') && !fideMultiResult.classList.contains('visible')) {
                     searchFidePlayer();
                 }
                 updateSaveButton();
@@ -1549,7 +1721,6 @@
                 return;
             }
 
-            // For tournament views, auto-expand the section
             expandTournamentSection();
 
             if (tournamentInput.value.trim()) {
@@ -1653,27 +1824,73 @@
             updateSaveButton();
         }
 
+        /* ---------------- FIDE search mode ---------------- */
+        function setFideMode(mode) {
+            fideMode = mode;
+
+            modeFideBtn.classList.toggle('active', mode === 'fide');
+            modeNameBtn.classList.toggle('active', mode === 'name');
+
+            if (mode === 'fide') {
+                fideSearchLabel.textContent = 'FIDE ID';
+                fideSearchInput.placeholder = 'e.g., 1503014';
+                fideSearchInput.setAttribute('inputmode', 'numeric');
+                fideSearchInput.value = fideSearchInput.value.replace(/\D/g, '');
+            } else {
+                fideSearchLabel.textContent = 'Name';
+                fideSearchInput.placeholder = 'e.g., Tan';
+                fideSearchInput.setAttribute('inputmode', 'text');
+            }
+
+            fideResult.classList.remove('visible');
+            fideMultiResult.classList.remove('visible');
+            fideBackBtn.classList.add('hidden');
+            fideStatus.textContent = '';
+            fideStatus.className = 'fide-status';
+        }
+
         /* ---------------- FIDE Player lookup ---------------- */
         async function searchFidePlayer() {
-            const fideId = fideIdInput.value.trim();
+            const value = fideSearchInput.value.trim();
 
-            if (!fideId || !/^\d{4,9}$/.test(fideId)) {
+            if (!value) {
+                fideStatus.textContent = fideMode === 'fide'
+                    ? 'Please enter a FIDE ID.'
+                    : 'Please enter a name.';
+                fideStatus.className = 'fide-status error';
+                return;
+            }
+
+            if (fideMode === 'fide' && !/^\d{4,9}$/.test(value)) {
                 fideStatus.textContent = 'Please enter a valid FIDE ID (4–9 digits).';
                 fideStatus.className = 'fide-status error';
-                fideResult.classList.remove('visible');
+                return;
+            }
+
+            if (fideMode === 'name' && value.length < 2) {
+                fideStatus.textContent = 'Please enter at least 2 characters for name search.';
+                fideStatus.className = 'fide-status error';
                 return;
             }
 
             fideSearchBtn.disabled = true;
-            fideStatus.textContent = `Searching FIDE ID ${fideId}...`;
+            fideStatus.textContent = fideMode === 'fide'
+                ? `Searching FIDE ID ${value}...`
+                : `Searching for "${value}"...`;
             fideStatus.className = 'fide-status';
+
             fideResult.classList.remove('visible');
+            fideMultiResult.classList.remove('visible');
+            fideBackBtn.classList.add('hidden');
 
             try {
-                const url = `${FIDE_API_URL}?fideId=${encodeURIComponent(fideId)}`;
+                const param = fideMode === 'fide'
+                    ? `fideId=${encodeURIComponent(value)}`
+                    : `name=${encodeURIComponent(value)}`;
+                const url = `${FIDE_API_URL}?${param}`;
                 const response = await fetch(url, { method: 'GET', redirect: 'follow' });
 
-                if (!response.ok) {
+                if (!response.ok && response.status !== 404) {
                     throw new Error(`HTTP ${response.status}`);
                 }
 
@@ -1685,15 +1902,24 @@
                     return;
                 }
 
-                if (!data.player) {
-                    fideStatus.textContent = 'Player not found.';
-                    fideStatus.className = 'fide-status error';
+                if (data.player) {
+                    renderFidePlayer(data.player);
+                    fideStatus.textContent = 'Player found.';
+                    fideStatus.className = 'fide-status success';
                     return;
                 }
 
-                renderFidePlayer(data.player);
-                fideStatus.textContent = 'Player found.';
-                fideStatus.className = 'fide-status success';
+                if (data.matches && data.matches.length > 0) {
+                    lastMatches = data.matches;
+                    lastMatchQuery = value;
+                    renderFideMatches(data.matches, value);
+                    fideStatus.textContent = `${data.matches.length} match${data.matches.length > 1 ? 'es' : ''} found.`;
+                    fideStatus.className = 'fide-status success';
+                    return;
+                }
+
+                fideStatus.textContent = 'No players found.';
+                fideStatus.className = 'fide-status error';
 
             } catch (error) {
                 console.error('FIDE fetch error:', error);
@@ -1704,6 +1930,7 @@
             }
         }
 
+        /* ---------------- Render single player ---------------- */
         function renderFidePlayer(player) {
             const title = player.Name || player.NAME || player.name || ('FIDE ID ' + player.FIDE_ID);
             fideResultTitle.textContent = title;
@@ -1734,6 +1961,80 @@
             });
 
             fideResult.classList.add('visible');
+        }
+
+        /* ---------------- Render multi-match list ---------------- */
+        function renderFideMatches(matches, query) {
+            fideMultiTitle.textContent = `Matches for "${query}" (${matches.length})`;
+            fideMatchList.innerHTML = '';
+
+            matches.forEach(function (player) {
+                const name = player.Name || player.NAME || player.name || 'Unknown';
+                const fideId = player.FIDE_ID || player.FideID || '';
+                const fed = player.FED || player.Federation || '';
+                const rating = player.Rtg || player.Rating || player.Standard_Rating || '';
+
+                const card = document.createElement('div');
+                card.className = 'fide-match-card';
+
+                const info = document.createElement('div');
+                info.className = 'fide-match-card-info';
+
+                const nameEl = document.createElement('div');
+                nameEl.className = 'fide-match-card-name';
+                nameEl.textContent = name;
+
+                const metaParts = [];
+                if (fideId) metaParts.push('FIDE ' + fideId);
+                if (fed) metaParts.push(fed);
+                if (rating) metaParts.push('Rtg ' + rating);
+
+                const metaEl = document.createElement('div');
+                metaEl.className = 'fide-match-card-meta';
+                metaEl.textContent = metaParts.join(' · ');
+
+                info.appendChild(nameEl);
+                info.appendChild(metaEl);
+                card.appendChild(info);
+
+                const loadBtn = document.createElement('button');
+                loadBtn.className = 'btn-load';
+                loadBtn.textContent = 'Load';
+                loadBtn.addEventListener('click', function () {
+                    loadMatchIntoView(player);
+                });
+                card.appendChild(loadBtn);
+
+                fideMatchList.appendChild(card);
+            });
+
+            fideMultiResult.classList.add('visible');
+        }
+
+        /* ---------------- Load a match into the detail view ---------------- */
+        function loadMatchIntoView(player) {
+            fideMultiResult.classList.remove('visible');
+            renderFidePlayer(player);
+            fideBackBtn.classList.remove('hidden');
+
+            const name = player.Name || player.NAME || player.name || 'Player';
+            fideStatus.textContent = `Showing ${name}.`;
+            fideStatus.className = 'fide-status success';
+        }
+
+        /* ---------------- Back to match list ---------------- */
+        function backToMatches() {
+            fideResult.classList.remove('visible');
+            fideBackBtn.classList.add('hidden');
+
+            if (lastMatches.length > 0) {
+                renderFideMatches(lastMatches, lastMatchQuery);
+                fideStatus.textContent = `${lastMatches.length} match${lastMatches.length > 1 ? 'es' : ''} found.`;
+                fideStatus.className = 'fide-status success';
+            } else {
+                fideStatus.textContent = '';
+                fideStatus.className = 'fide-status';
+            }
         }
 
         /* ---------------- Viewport changes ---------------- */
